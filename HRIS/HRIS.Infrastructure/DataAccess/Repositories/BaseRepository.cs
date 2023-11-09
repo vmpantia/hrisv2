@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using HRIS.Domain.Interfaces.Models;
 using HRIS.Domain.Interfaces.Repositories;
+using HRIS.Domain.Specifications;
 using HRIS.Domain.Utils;
 using HRIS.Infrastructure.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace HRIS.Infrastructure.DataAccess.Repositories
 {
@@ -20,14 +20,38 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             _table = context.Set<TEntity>();
         }
 
-        public IQueryable<TEntity> GetAll() =>
-            _table.AsNoTracking()
-                  .AsQueryable();
+        public IEnumerable<TEntity> GetAll(ISpecification<TEntity> specification = null)
+        {
+            var result = _table.AsNoTracking();
 
-        public IQueryable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> expression) =>
-            _table.Where(expression)
-                  .AsNoTracking()
-                  .AsQueryable();
+            if (specification.isPagingEnabled)
+                result = result.Take(specification.Take).Skip(specification.Skip);
+
+            if (specification.OrderBy != null)
+                result = result.OrderBy(specification.OrderBy);
+
+            if (specification.OrderByDescending != null)
+                result = result.OrderByDescending(specification.OrderByDescending);
+
+            return specification.Includes.Aggregate(result, (current, include) => current.Include(include));
+        }
+
+        public IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification)
+        {
+            var result = _table.Where(specification.Criteria).AsNoTracking();
+
+            if (specification.isPagingEnabled)
+                result = result.Take(specification.Take).Skip(specification.Skip);
+
+            if (specification.OrderBy != null)
+                result = result.OrderBy(specification.OrderBy);
+
+            if (specification.OrderByDescending != null)
+                result = result.OrderByDescending(specification.OrderByDescending);
+
+            return specification.Includes.Aggregate(result, (current, include) => current.Include(include));
+        }
+
 
         public void Create(TEntity entity, bool isAutoSave = false)
         {

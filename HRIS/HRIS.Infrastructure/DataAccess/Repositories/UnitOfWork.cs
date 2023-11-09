@@ -16,6 +16,8 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             _mapper = mapper;
         }
 
+        public IMapper Mapper { get { return _mapper; } }
+
         public IBaseRepository<Employee> Employee
         {
             get

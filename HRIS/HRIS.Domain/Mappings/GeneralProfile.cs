@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
 
 namespace HRIS.Domain.Mappings
@@ -9,6 +10,8 @@ namespace HRIS.Domain.Mappings
         {
             CreateMap<Employee, EmployeeVersion>()
                 .ReverseMap();
+
+            CreateMap<SaveEmployeeDto, Employee>();
         }
     }
 }
