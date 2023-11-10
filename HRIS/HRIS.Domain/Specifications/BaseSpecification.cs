@@ -1,14 +1,10 @@
 ﻿using System.Linq.Expressions;
+using HRIS.Domain.Interfaces.Specifications;
 
 namespace HRIS.Domain.Specifications
 {
     public class BaseSpecification<TEntity> : ISpecification<TEntity>
     {
-        public BaseSpecification() { }
-
-        public BaseSpecification(Expression<Func<TEntity, bool>> Criteria) =>
-            this.Criteria = Criteria;
-
         public Expression<Func<TEntity, bool>> Criteria { get; private set; }
 
         public List<Expression<Func<TEntity, object>>> Includes { get; } = new List<Expression<Func<TEntity, object>>>();
@@ -23,23 +19,36 @@ namespace HRIS.Domain.Specifications
 
         public bool isPagingEnabled { get; private set; }
 
-        public void AddInclude(Expression<Func<TEntity, object>> includeExpression) =>
+        public BaseSpecification<TEntity> AddInclude(Expression<Func<TEntity, object>> includeExpression)
+        {
             Includes.Add(includeExpression);
+            return this;
+        }
 
-        public void SetCriteria(Expression<Func<TEntity, bool>> criteriaExpression) =>
+        public BaseSpecification<TEntity> SetCriteria(Expression<Func<TEntity, bool>> criteriaExpression)
+        {
             Criteria = criteriaExpression;
+            return this;
+        }
 
-        public void SetOrderBy(Expression<Func<TEntity, object>> OrderByexpression) =>
+        public BaseSpecification<TEntity> SetOrderBy(Expression<Func<TEntity, object>> OrderByexpression)
+        {
             OrderBy = OrderByexpression;
+            return this;
+        }
 
-        public void SetOrderByDecending(Expression<Func<TEntity, object>> OrderByDecending) =>
+        public BaseSpecification<TEntity> SetOrderByDecending(Expression<Func<TEntity, object>> OrderByDecending)
+        {
             OrderByDescending = OrderByDecending;
+            return this;
+        }
 
-        public void ApplyPagging(int take, int skip)
+        public BaseSpecification<TEntity> ApplyPagging(int take, int skip)
         {
             Take = take;
             Skip = skip;
             isPagingEnabled = true;
+            return this;
         }
     }
 }

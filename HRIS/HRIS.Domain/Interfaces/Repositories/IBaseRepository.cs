@@ -1,6 +1,5 @@
 ﻿using HRIS.Domain.Interfaces.Models;
-using HRIS.Domain.Specifications;
-using System.Linq.Expressions;
+using HRIS.Domain.Interfaces.Specifications;
 
 namespace HRIS.Domain.Interfaces.Repositories
 {
@@ -10,6 +9,6 @@ namespace HRIS.Domain.Interfaces.Repositories
         IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification);
         void Create(TEntity entity, bool isAutoSave = false);
         void Update(TEntity entity, bool isAutoSave = false);
-        void CreateVersion<TEntityVersion>(TEntity entity, bool isAutoSave = false) where TEntityVersion : class, IEntityVersion;
+        void Version<TEntityVersion>(TEntity entity, bool isAutoSave = false) where TEntityVersion : class, IEntityVersion;
     }
 }

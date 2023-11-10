@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using HRIS.Domain.Models.Entities;
+using HRIS.Infrastructure.DataAccess.Repositories;
 
 namespace HRIS.Domain.Interfaces.Repositories
 {
     public interface IUnitOfWork
     {
         IMapper Mapper { get; }
+        IConfigRepository Config { get; }
         IBaseRepository<Employee> Employee { get; }
         void Save();
     }

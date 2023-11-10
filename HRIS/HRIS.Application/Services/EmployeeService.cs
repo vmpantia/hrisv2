@@ -1,16 +1,24 @@
-﻿using HRIS.Domain.Interfaces.Repositories;
+﻿using HRIS.Domain.Helpers;
+using HRIS.Domain.Interfaces.Repositories;
+using HRIS.Domain.Interfaces.Services;
+using HRIS.Domain.Interfaces.Specifications;
 using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
 using HRIS.Domain.Models.Enums;
 using HRIS.Domain.Specifications;
+using HRIS.Domain.Utils;
 
 namespace HRIS.Application.Services
 {
-    public class EmployeeService
+    public class EmployeeService : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfwork;
-        public EmployeeService(IUnitOfWork unitOfwork) =>
+        private readonly IDNumberHelper _numberHelper;
+        public EmployeeService(IUnitOfWork unitOfwork)
+        {
             _unitOfwork = unitOfwork;
+            _numberHelper = new IDNumberHelper(unitOfwork);
+        }
 
         public bool IsEmployeeExist(ISpecification<Employee> specification) =>
             _unitOfwork.Employee.GetByExpression(specification)
@@ -23,7 +31,7 @@ namespace HRIS.Application.Services
         public Employee GetEmployee(ISpecification<Employee> specification) =>
             _unitOfwork.Employee.GetByExpression(specification)
                                 .First();
-        
+
         public void CreateEmployee(SaveEmployeeDto request, string requestor)
         {
             // Map SaveEmployeeDto to Employee
@@ -31,13 +39,15 @@ namespace HRIS.Application.Services
 
             // Set initial data when creating employee
             employee.Id = Guid.NewGuid();
-            employee.Number = employee.Id.ToString();
+            employee.Number = _numberHelper.GenerateIdNumber("ID_NUMBER_EMPLOYEE_PREFIX");
             employee.Status = CommonStatus.Active;
             employee.CreatedAt = DateTime.Now;
             employee.CreatedBy = requestor;
 
             // Create and Save employee
             _unitOfwork.Employee.Create(employee);
+            _unitOfwork.Employee.Version<EmployeeVersion>(employee);
+            _unitOfwork.Save();
         }
 
         public void UpdateEmployee(Guid employeeId, SaveEmployeeDto request, string requestor)
@@ -58,6 +68,8 @@ namespace HRIS.Application.Services
 
             // Update and Save employee
             _unitOfwork.Employee.Update(updated);
+            _unitOfwork.Employee.Version<EmployeeVersion>(employee);
+            _unitOfwork.Save();
         }
 
         public void UpdateEmployeeStatus(Guid employeeId, CommonStatus newStatus, string requestor)
@@ -84,6 +96,8 @@ namespace HRIS.Application.Services
 
             // Update and Save employee
             _unitOfwork.Employee.Update(employee);
+            _unitOfwork.Employee.Version<EmployeeVersion>(employee);
+            _unitOfwork.Save();
         }
     }
 }

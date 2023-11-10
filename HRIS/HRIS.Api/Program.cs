@@ -1,10 +1,12 @@
 using HRIS.Domain.Extensions;
+using HRIS.Application.Extensions;
 using HRIS.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDomainServices();
+builder.Services.AddAplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers();

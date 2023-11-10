@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using HRIS.Domain.Interfaces.Models;
 using HRIS.Domain.Interfaces.Repositories;
-using HRIS.Domain.Specifications;
+using HRIS.Domain.Interfaces.Specifications;
 using HRIS.Domain.Utils;
 using HRIS.Infrastructure.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +10,9 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        private readonly HRISDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly DbSet<TEntity> _table;
+        protected readonly HRISDbContext _context;
+        protected readonly IMapper _mapper;
+        protected readonly DbSet<TEntity> _table;
         public BaseRepository(HRISDbContext context, IMapper mapper)
         {
             _context = context;
@@ -69,7 +69,7 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
                 _context.SaveChanges();
         }
 
-        public void CreateVersion<TEntityVersion>(TEntity entity, bool isAutoSave = false) where TEntityVersion : class, IEntityVersion
+        public void Version<TEntityVersion>(TEntity entity, bool isAutoSave = false) where TEntityVersion : class, IEntityVersion
         {
             var latestVersion = _mapper.Map<TEntityVersion>(entity);
 

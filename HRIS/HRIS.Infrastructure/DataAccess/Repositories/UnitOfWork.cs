@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HRIS.Domain.Interfaces.Models;
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Models.Entities;
 using HRIS.Infrastructure.DataAccess.Database;
@@ -9,6 +10,7 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
     {
         private readonly HRISDbContext _context;
         private readonly IMapper _mapper;
+        private IConfigRepository _config;
         private IBaseRepository<Employee> _employee;
         public UnitOfWork(HRISDbContext context, IMapper mapper)
         {
@@ -17,6 +19,17 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
         }
 
         public IMapper Mapper { get { return _mapper; } }
+
+        public IConfigRepository Config
+        {
+            get
+            {
+                if (_config == null)
+                    _config = new ConfigRepository(_context, _mapper);
+
+                return _config;
+            }
+        }
 
         public IBaseRepository<Employee> Employee
         {
