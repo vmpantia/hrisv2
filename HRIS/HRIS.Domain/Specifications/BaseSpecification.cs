@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using HRIS.Domain.Interfaces.Specifications;
+using HRIS.Domain.Models.Common;
 
 namespace HRIS.Domain.Specifications
 {
@@ -13,11 +14,10 @@ namespace HRIS.Domain.Specifications
 
         public Expression<Func<TEntity, object>> OrderByDescending { get; private set; }
 
+        public int Skip { get; private set; }
         public int Take { get; private set; }
 
-        public int Skip { get; private set; }
-
-        public bool isPagingEnabled { get; private set; }
+        public bool IsPaginationEnabled { get; private set; }
 
         public BaseSpecification<TEntity> AddInclude(Expression<Func<TEntity, object>> includeExpression)
         {
@@ -43,11 +43,11 @@ namespace HRIS.Domain.Specifications
             return this;
         }
 
-        public BaseSpecification<TEntity> ApplyPagging(int take, int skip)
+        public BaseSpecification<TEntity> SetPagination(Pagination pagination)
         {
-            Take = take;
-            Skip = skip;
-            isPagingEnabled = true;
+            Skip = (pagination.PageNumber - 1) * pagination.PageSize;
+            Take = pagination.PageSize;
+            IsPaginationEnabled = true;
             return this;
         }
     }

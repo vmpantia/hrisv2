@@ -20,11 +20,14 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             _table = context.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> GetAll(ISpecification<TEntity> specification = null)
+        public IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification)
         {
             var result = _table.AsNoTracking();
 
-            if (specification.isPagingEnabled)
+            if (specification.Criteria != null)
+                result = _table.Where(specification.Criteria);
+
+            if (specification.IsPaginationEnabled)
                 result = result.Take(specification.Take).Skip(specification.Skip);
 
             if (specification.OrderBy != null)
@@ -35,23 +38,6 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
             return specification.Includes.Aggregate(result, (current, include) => current.Include(include));
         }
-
-        public IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification)
-        {
-            var result = _table.Where(specification.Criteria).AsNoTracking();
-
-            if (specification.isPagingEnabled)
-                result = result.Take(specification.Take).Skip(specification.Skip);
-
-            if (specification.OrderBy != null)
-                result = result.OrderBy(specification.OrderBy);
-
-            if (specification.OrderByDescending != null)
-                result = result.OrderByDescending(specification.OrderByDescending);
-
-            return specification.Includes.Aggregate(result, (current, include) => current.Include(include));
-        }
-
 
         public void Create(TEntity entity, bool isAutoSave = false)
         {

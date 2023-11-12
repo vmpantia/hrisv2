@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HRIS.Domain.Interfaces.Models;
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Models.Entities;
 using HRIS.Infrastructure.DataAccess.Database;

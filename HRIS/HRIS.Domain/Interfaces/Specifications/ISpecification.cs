@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using HRIS.Domain.Models.Common;
+using System.Linq.Expressions;
 
 namespace HRIS.Domain.Interfaces.Specifications
 {
@@ -8,8 +9,8 @@ namespace HRIS.Domain.Interfaces.Specifications
         List<Expression<Func<TEntity, object>>> Includes { get; }
         Expression<Func<TEntity, object>> OrderBy { get; }
         Expression<Func<TEntity, object>> OrderByDescending { get; }
-        int Take { get; }
-        int Skip { get; }
-        bool isPagingEnabled { get; }
+        public int Skip { get; }
+        public int Take { get; }
+        public bool IsPaginationEnabled { get; }
     }
 }
