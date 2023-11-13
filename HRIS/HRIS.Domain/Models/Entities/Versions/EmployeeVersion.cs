@@ -2,11 +2,12 @@
 using HRIS.Domain.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace HRIS.Domain.Models.Entities
+namespace HRIS.Domain.Models.Entities.Versions
 {
-    public class Employee : IEntity
+    public class EmployeeVersion : IEntityVersion
     {
         [Key]
+        public DateTime Version { get; set; }
         public Guid Id { get; set; }
         public string Number { get; set; }
         public string FirstName { get; set; }
@@ -21,8 +22,5 @@ namespace HRIS.Domain.Models.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string? DeletedBy { get; set; }
-
-        public virtual ICollection<Contact> Contacts { get; set; }
-        public virtual ICollection<Address> Addresses { get; set; }
     }
 }

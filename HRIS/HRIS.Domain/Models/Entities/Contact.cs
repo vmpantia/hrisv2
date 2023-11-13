@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HRIS.Domain.Models.Entities
 {
-    public class Employee : IEntity
+    public class Contact : IEntity
     {
         [Key]
         public Guid Id { get; set; }
-        public string Number { get; set; }
-        public string FirstName { get; set; }
-        public string? MiddleName { get; set; }
-        public string LastName { get; set; }
-        public string Gender { get; set; }
-        public DateTime BirthDate { get; set; }
+        public Guid EmployeeId { get; set; }
+        public string Value { get; set; }
+        public ContactType Type { get; set; }
+        public bool IsPrimary { get; set; }
         public CommonStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
@@ -22,7 +20,6 @@ namespace HRIS.Domain.Models.Entities
         public DateTime? DeletedAt { get; set; }
         public string? DeletedBy { get; set; }
 
-        public virtual ICollection<Contact> Contacts { get; set; }
-        public virtual ICollection<Address> Addresses { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

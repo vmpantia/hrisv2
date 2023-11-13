@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
+using HRIS.Domain.Models.Entities.Versions;
 
 namespace HRIS.Domain.Mappings
 {

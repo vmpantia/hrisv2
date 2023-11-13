@@ -4,17 +4,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HRIS.Domain.Models.Entities
 {
-    public class EmployeeVersion : IEntityVersion
+    public class Address : IEntity
     {
         [Key]
-        public DateTime Version { get; set; }
         public Guid Id { get; set; }
-        public string Number { get; set; }
-        public string FirstName { get; set; }
-        public string? MiddleName { get; set; }
-        public string LastName { get; set; }
-        public string Gender { get; set; }
-        public DateTime BirthDate { get; set; }
+        public Guid EmployeeId { get; set; }
+        public string Line1 { get; set; }
+        public string? Line2 { get; set; }
+        public string Barangay { get; set; }
+        public string City { get; set; }
+        public string Province { get; set; }
+        public string ZipCode { get; set; }
+        public string Country { get; set; }
+        public AddressType Type { get; set; }
         public CommonStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
@@ -22,5 +24,7 @@ namespace HRIS.Domain.Models.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string? DeletedBy { get; set; }
+
+        public virtual Employee Employee { get; set; }
     }
 }

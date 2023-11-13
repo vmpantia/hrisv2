@@ -5,6 +5,7 @@ using HRIS.Domain.Interfaces.Services;
 using HRIS.Domain.Interfaces.Specifications;
 using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
+using HRIS.Domain.Models.Entities.Versions;
 using HRIS.Domain.Models.Enums;
 using HRIS.Domain.Specifications;
 

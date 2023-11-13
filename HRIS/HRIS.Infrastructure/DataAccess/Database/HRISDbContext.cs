@@ -1,4 +1,5 @@
 ﻿using HRIS.Domain.Models.Entities;
+using HRIS.Domain.Models.Entities.Versions;
 using HRIS.Infrastructure.DataAccess.Stubs;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,8 @@ namespace HRIS.Infrastructure.DataAccess.Database
     {
         private readonly List<Config> _initialConfigs;
         private readonly List<Employee> _stubEmployees;
+        private readonly List<Contact> _stubContacts;
+        private readonly List<Address> _stubAddresses;
         public HRISDbContext(DbContextOptions options) : base(options)
         {
             #region Initial Data
@@ -22,25 +25,58 @@ namespace HRIS.Infrastructure.DataAccess.Database
             #region Stub Data
             _stubEmployees = StubData.FakerEmployee()
                                      .Generate(100);
+            _stubContacts = StubData.FakerContact(_stubEmployees.Select(data => data.Id).ToList())
+                                     .Generate(50);
+            _stubAddresses = StubData.FakerAddress(_stubEmployees.Select(data => data.Id).ToList())
+                                     .Generate(50);
             #endregion
         }
 
         public DbSet<Config> Configs { get; set; }
         public DbSet<Employee> Employees { get; set; }
+
+        #region Version Tables
         public DbSet<EmployeeVersion> EmployeeVersions { get; set; }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region Data Seeding
+            #region Table Configurations
+            modelBuilder.Entity<Employee>()
+                .HasMany(emp => emp.Contacts)
+                .WithOne(con => con.Employee)
+                .HasForeignKey(con => con.EmployeeId)
+                .IsRequired();
 
+            modelBuilder.Entity<Employee>()
+                .HasMany(emp => emp.Addresses)
+                .WithOne(add => add.Employee)
+                .HasForeignKey(add => add.EmployeeId)
+                .IsRequired();
+
+            modelBuilder.Entity<Contact>()
+                .HasOne(con => con.Employee)
+                .WithMany(emp => emp.Contacts)
+                .HasForeignKey(con => con.EmployeeId)
+                .IsRequired();
+
+            modelBuilder.Entity<Address>()
+                .HasOne(add => add.Employee)
+                .WithMany(emp => emp.Addresses)
+                .HasForeignKey(add => add.EmployeeId)
+                .IsRequired();
+            #endregion
+
+            #region Data Seeding
             #region Initial Data
             modelBuilder.Entity<Config>().HasData(_initialConfigs);
             #endregion
 
             #region Stub Data
             modelBuilder.Entity<Employee>().HasData(_stubEmployees);
+            modelBuilder.Entity<Contact>().HasData(_stubContacts);
+            modelBuilder.Entity<Address>().HasData(_stubAddresses);
             #endregion
-
             #endregion
         }
     }

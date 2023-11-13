@@ -22,7 +22,9 @@ namespace HRIS.Api.Controllers
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
             specification.SetOrderBy(data => data.CreatedAt)
-                         .SetPagination(request);
+                         .SetPagination(request)
+                         .AddInclude(tbl => tbl.Contacts)
+                         .AddInclude(tbl => tbl.Addresses);
 
             // Get employees based on the specification
             var result = _employee.GetEmployees(specification);
@@ -35,7 +37,9 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Id == id);
+            specification.SetCriteria(data => data.Id == id)
+                         .AddInclude(tbl => tbl.Contacts)
+                         .AddInclude(tbl => tbl.Addresses);
 
             // Get employee based on the specification
             var result = _employee.GetEmployee(specification);
