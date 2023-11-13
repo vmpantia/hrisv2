@@ -21,15 +21,17 @@ namespace HRIS.Application.Services
             _numberHelper = new IDNumberHelper(unitOfwork);
         }
 
-        public List<Employee> GetEmployees(ISpecification<Employee> specification) =>
+        public List<TDto> GetEmployees<TDto>(ISpecification<Employee> specification) => 
             _unitOfwork.Employee.GetByExpression(specification)
+                                .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .ToList();
 
-        public Employee GetEmployee(ISpecification<Employee> specification) =>
+        public TDto GetEmployee<TDto>(ISpecification<Employee> specification) =>
             _unitOfwork.Employee.GetByExpression(specification)
+                                .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .First();
 
-        public Employee CreateEmployee(SaveEmployeeDto request, string requestor)
+        public Guid CreateEmployee(SaveEmployeeDto request, string requestor)
         {
             // Map SaveEmployeeDto to Employee
             var employee = _unitOfwork.Mapper.Map<Employee>(request);
@@ -46,7 +48,7 @@ namespace HRIS.Application.Services
             _unitOfwork.Employee.Version<EmployeeVersion>(employee);
             _unitOfwork.Save();
 
-            return employee;
+            return employee.Id;
         }
 
         public void UpdateEmployee(Guid employeeId, SaveEmployeeDto request, string requestor)

@@ -27,7 +27,7 @@ namespace HRIS.Api.Controllers
                          .AddInclude(tbl => tbl.Addresses);
 
             // Get employees based on the specification
-            var result = _employee.GetEmployees(specification);
+            var result = _employee.GetEmployees<EmployeeLiteDto>(specification);
 
             return Ok(result);
         }
@@ -42,7 +42,7 @@ namespace HRIS.Api.Controllers
                          .AddInclude(tbl => tbl.Addresses);
 
             // Get employee based on the specification
-            var result = _employee.GetEmployee(specification);
+            var result = _employee.GetEmployee<EmployeeLiteDto>(specification);
 
             return Ok(result);
         }
@@ -55,7 +55,7 @@ namespace HRIS.Api.Controllers
 
             return Ok(new { 
                 message = "Employee successfully created.", 
-                id = result.Id 
+                id = result 
             });
         }
 
