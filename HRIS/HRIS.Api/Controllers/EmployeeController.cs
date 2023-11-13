@@ -17,12 +17,12 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetEmployees(FilterWithPagination filter)
+        public IActionResult GetEmployees([FromForm] FilterWithPagination request)
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
             specification.SetOrderBy(data => data.CreatedAt)
-                         .SetPagination(filter);
+                         .SetPagination(request);
 
             // Get employees based on the specification
             var result = _employee.GetEmployees(specification);
