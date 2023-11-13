@@ -47,6 +47,14 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             return specification.Includes.Aggregate(result, (current, include) => current.Include(include));
         }
 
+        public TEntity GetOne(ISpecification<TEntity> specification)
+        {
+            if (specification.Criteria == null)
+                throw new Exception("Specification criteria cannot be NULL when getting one record.");
+
+            return _table.First(specification.Criteria);
+        }
+
         public void Create(TEntity entity, bool isAutoSave = false)
         {
             _table.Add(entity);

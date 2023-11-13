@@ -59,7 +59,7 @@ namespace HRIS.Application.Services
                 throw new NotFoundException("Employee not found in the database.");
 
             // Get employee to be update
-            var employee = GetEmployee(specification);
+            var employee = _unitOfwork.Employee.GetOne(specification);
 
             // Check if the employee is active
             if (employee.Status != CommonStatus.Active)
@@ -89,7 +89,7 @@ namespace HRIS.Application.Services
                 throw new NotFoundException("Employee not found in the database.");
 
             // Get employee to be update
-            var employee = GetEmployee(specification);
+            var employee = _unitOfwork.Employee.GetOne(specification);
 
             // Check if the employee current status and new status are same
             if (employee.Status == newStatus)

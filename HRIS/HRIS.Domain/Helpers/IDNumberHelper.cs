@@ -25,7 +25,7 @@ namespace HRIS.Domain.Helpers
                 int randomNumber = random.Next(0, 9);
                 number += randomNumber.ToString();
             }
-            return string.Format(_format, prefix, DateUtil.GetCurrentDate().ToString("YYMM"), number); ;
+            return string.Format(_format, prefix, DateUtil.GetCurrentDate().ToString("yyMMdd"), number); ;
         }
     }
 }
