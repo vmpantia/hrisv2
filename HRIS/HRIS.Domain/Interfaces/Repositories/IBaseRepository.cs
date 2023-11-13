@@ -5,6 +5,7 @@ namespace HRIS.Domain.Interfaces.Repositories
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {
+        bool IsExist(ISpecification<TEntity> specification);
         IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification);
         void Create(TEntity entity, bool isAutoSave = false);
         void Update(TEntity entity, bool isAutoSave = false);

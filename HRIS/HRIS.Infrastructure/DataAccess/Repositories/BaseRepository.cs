@@ -20,6 +20,14 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             _table = context.Set<TEntity>();
         }
 
+        public bool IsExist(ISpecification<TEntity> specification)
+        {
+            if (specification.Criteria == null)
+                throw new Exception("Specification criteria cannot be NULL when checking if the data exist.");
+
+            return _table.Any(specification.Criteria);
+        }
+
         public IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification)
         {
             var result = _table.AsNoTracking();

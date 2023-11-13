@@ -1,4 +1,5 @@
-﻿using HRIS.Domain.Helpers;
+﻿using HRIS.Domain.Exceptions;
+using HRIS.Domain.Helpers;
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Interfaces.Services;
 using HRIS.Domain.Interfaces.Specifications;
@@ -6,7 +7,6 @@ using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
 using HRIS.Domain.Models.Enums;
 using HRIS.Domain.Specifications;
-using HRIS.Domain.Utils;
 
 namespace HRIS.Application.Services
 {
@@ -20,10 +20,6 @@ namespace HRIS.Application.Services
             _numberHelper = new IDNumberHelper(unitOfwork);
         }
 
-        public bool IsEmployeeExist(ISpecification<Employee> specification) =>
-            _unitOfwork.Employee.GetByExpression(specification)
-                                .Any();
-
         public List<Employee> GetEmployees(ISpecification<Employee> specification) =>
             _unitOfwork.Employee.GetByExpression(specification)
                                 .ToList();
@@ -32,7 +28,7 @@ namespace HRIS.Application.Services
             _unitOfwork.Employee.GetByExpression(specification)
                                 .First();
 
-        public void CreateEmployee(SaveEmployeeDto request, string requestor)
+        public Employee CreateEmployee(SaveEmployeeDto request, string requestor)
         {
             // Map SaveEmployeeDto to Employee
             var employee = _unitOfwork.Mapper.Map<Employee>(request);
@@ -48,16 +44,26 @@ namespace HRIS.Application.Services
             _unitOfwork.Employee.Create(employee);
             _unitOfwork.Employee.Version<EmployeeVersion>(employee);
             _unitOfwork.Save();
+
+            return employee;
         }
 
         public void UpdateEmployee(Guid employeeId, SaveEmployeeDto request, string requestor)
         {
             // Prepare employee specification
             var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Id == employeeId && data.Status == CommonStatus.Active);
+            specification.SetCriteria(data => data.Id == employeeId);
+
+            // Check if the employee exist
+            if (!_unitOfwork.Employee.IsExist(specification))
+                throw new NotFoundException("Employee not found in the database.");
 
             // Get employee to be update
             var employee = GetEmployee(specification);
+
+            // Check if the employee is active
+            if (employee.Status != CommonStatus.Active)
+                throw new ValidationException($"Employee cannot be updated since due to status ({employee.Status.ToString()}) is not editable.");
 
             // Map SaveEmployeeDto to Employee
             var updated = _unitOfwork.Mapper.Map(request, employee);
@@ -78,8 +84,16 @@ namespace HRIS.Application.Services
             var specification = new BaseSpecification<Employee>();
             specification.SetCriteria(data => data.Id == employeeId && data.Status == CommonStatus.Active);
 
+            // Check if the employee exist
+            if (!_unitOfwork.Employee.IsExist(specification))
+                throw new NotFoundException("Employee not found in the database.");
+
             // Get employee to be update
             var employee = GetEmployee(specification);
+
+            // Check if the employee current status and new status are same
+            if (employee.Status == newStatus)
+                throw new ValidationException("Employee current status and new status are the same.");
 
             // Set initial data when updating employee status
             employee.Status = newStatus;

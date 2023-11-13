@@ -1,5 +1,7 @@
 using HRIS.Domain.Interfaces.Services;
+using HRIS.Domain.Interfaces.Specifications;
 using HRIS.Domain.Models.Common;
+using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
 using HRIS.Domain.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +13,11 @@ namespace HRIS.Api.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employee;
-        public EmployeeController(IEmployeeService employee)
-        {
+        public EmployeeController(IEmployeeService employee) =>
             _employee = employee;
-        }
 
-        [HttpPost]
-        public IActionResult GetEmployees([FromForm] FilterWithPagination request)
+        [HttpGet]
+        public IActionResult GetEmployees([FromQuery] FilterWithPagination request)
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
@@ -28,6 +28,49 @@ namespace HRIS.Api.Controllers
             var result = _employee.GetEmployees(specification);
 
             return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetEmployee(Guid id)
+        {
+            // Set specification for getting employees
+            var specification = new BaseSpecification<Employee>();
+            specification.SetCriteria(data => data.Id == id);
+
+            // Get employee based on the specification
+            var result = _employee.GetEmployee(specification);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public IActionResult PostEmployee([FromForm] SaveEmployeeDto request)
+        {
+            // Create employee
+            var result = _employee.CreateEmployee(request, string.Empty);
+
+            return Ok(new { 
+                message = "Employee successfully created.", 
+                id = result.Id 
+            });
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult PutEmployee(Guid id, [FromForm] SaveEmployeeDto request)
+        {
+            // Update employee
+            _employee.UpdateEmployee(id, request, string.Empty);
+
+            return Ok("Employee successfully updated");
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PatchEmployeeStatus(Guid id, [FromForm] ChangeCommonStatusDto request)
+        {
+            // Update employee status
+            _employee.UpdateEmployeeStatus(id, request.NewStatus, string.Empty);
+
+            return Ok("Employee successfully updated");
         }
     }
 }
