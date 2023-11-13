@@ -3,6 +3,7 @@ using HRIS.Domain.Interfaces.Specifications;
 using HRIS.Domain.Models.Common;
 using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
+using HRIS.Domain.Models.Enums;
 using HRIS.Domain.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,8 +24,22 @@ namespace HRIS.Api.Controllers
             var specification = new BaseSpecification<Employee>();
             specification.SetOrderBy(data => data.CreatedAt)
                          .SetPagination(request)
-                         .AddInclude(tbl => tbl.Contacts)
-                         .AddInclude(tbl => tbl.Addresses);
+                         .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
+                         .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active));
+
+            // Get employees based on the specification
+            var result = _employee.GetEmployees<EmployeeDto>(specification);
+
+            return Ok(result);
+        }
+
+        [HttpGet("lite")]
+        public IActionResult GetEmployees()
+        {
+            // Set specification for getting employees
+            var specification = new BaseSpecification<Employee>();
+            specification.SetCriteria(data => data.Status == CommonStatus.Active)
+                         .SetOrderBy(data => data.CreatedAt);
 
             // Get employees based on the specification
             var result = _employee.GetEmployees<EmployeeLiteDto>(specification);
@@ -38,11 +53,11 @@ namespace HRIS.Api.Controllers
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
             specification.SetCriteria(data => data.Id == id)
-                         .AddInclude(tbl => tbl.Contacts)
-                         .AddInclude(tbl => tbl.Addresses);
+                         .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
+                         .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active));
 
             // Get employee based on the specification
-            var result = _employee.GetEmployee<EmployeeLiteDto>(specification);
+            var result = _employee.GetEmployee<EmployeeDto>(specification);
 
             return Ok(result);
         }
