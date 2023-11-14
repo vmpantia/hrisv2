@@ -6,8 +6,7 @@ namespace HRIS.Domain.Models.Dtos
 {
     public class SaveContactDto
     {
-        [Required]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         [Required]
         public string Value { get; set; }
         [Required]

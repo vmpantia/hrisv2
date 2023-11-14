@@ -32,11 +32,11 @@ namespace HRIS.Domain.Mappings
                 .ForMember(dst => dst.Age, opt => opt.MapFrom(src => DateUtil.GetDayDifference(src.BirthDate)))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
-            CreateMap<ContactVersion, ContactDto>()
+            CreateMap<Contact, ContactDto>()
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
-            CreateMap<AddressVersion, AddressDto>()
+            CreateMap<Address, AddressDto>()
                 .ForMember(dst => dst.Address, opt => opt.MapFrom(src => src.GetFullAddress()))
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));

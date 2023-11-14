@@ -6,8 +6,7 @@ namespace HRIS.Domain.Models.Dtos
 {
     public class SaveAddressDto
     {
-        [Required]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         [Required]
         public string Line1 { get; set; }
         public string? Line2 { get; set; }
