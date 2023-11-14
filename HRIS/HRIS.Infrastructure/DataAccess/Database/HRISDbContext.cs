@@ -18,7 +18,7 @@ namespace HRIS.Infrastructure.DataAccess.Database
             {
                 new Config { Section = "SYSTEM", Key = "ID_NUMBER_FORMAT", Value = "{0}-{1}-{2}" },
                 new Config { Section = "SYSTEM", Key = "ID_NUMBER_DIGIT", Value = "7" },
-                new Config { Section = "SYSTEM", Key = "ID_NUMBER_EMPPLOYEE_PREFIX", Value = "EMP" },
+                new Config { Section = "SYSTEM", Key = "ID_NUMBER_EMPLOYEE_PREFIX", Value = "EMP" },
             };
             #endregion
 
@@ -34,9 +34,13 @@ namespace HRIS.Infrastructure.DataAccess.Database
 
         public DbSet<Config> Configs { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         #region Version Tables
         public DbSet<EmployeeVersion> EmployeeVersions { get; set; }
+        public DbSet<ContactVersion> ContactVersions { get; set; }
+        public DbSet<AddressVersion> AddressVersions { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

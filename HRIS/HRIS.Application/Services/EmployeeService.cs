@@ -43,9 +43,41 @@ namespace HRIS.Application.Services
             employee.CreatedAt = DateTime.Now;
             employee.CreatedBy = requestor;
 
-            // Create and Save employee
+            #region Create employee contacts
+            // Create employee contacts
+            foreach (var contact in employee.Contacts)
+            {
+                contact.Id = Guid.NewGuid();
+                contact.EmployeeId = employee.Id;
+                contact.Status = CommonStatus.Active;
+                contact.CreatedAt = DateTime.Now;
+                contact.CreatedBy = requestor;
+
+                _unitOfwork.Contact.Create(contact);
+                _unitOfwork.Contact.Version<ContactVersion>(contact);
+            }
+            #endregion
+
+            #region Create employee address
+            // Create employee address
+            foreach (var address in employee.Addresses)
+            {
+                address.Id = Guid.NewGuid();
+                address.EmployeeId = employee.Id;
+                address.Status = CommonStatus.Active;
+                address.CreatedAt = DateTime.Now;
+                address.CreatedBy = requestor;
+
+                _unitOfwork.Address.Create(address);
+                _unitOfwork.Address.Version<AddressVersion>(address);
+            }
+            #endregion
+
+            // Create employee information
             _unitOfwork.Employee.Create(employee);
             _unitOfwork.Employee.Version<EmployeeVersion>(employee);
+
+            // Save all information of new employee
             _unitOfwork.Save();
 
             return employee.Id;

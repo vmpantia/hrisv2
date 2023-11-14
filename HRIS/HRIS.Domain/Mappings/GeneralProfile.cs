@@ -13,8 +13,15 @@ namespace HRIS.Domain.Mappings
         {
             CreateMap<Employee, EmployeeVersion>()
                 .ReverseMap();
+            CreateMap<Contact, ContactVersion>()
+                .ReverseMap();
+            CreateMap<Address, AddressVersion>()
+                .ReverseMap();
+
 
             CreateMap<SaveEmployeeDto, Employee>();
+            CreateMap<SaveContactDto, Contact>();
+            CreateMap<SaveAddressDto, Address>();
 
             CreateMap<Employee, EmployeeLiteDto>()
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.GetFullName()))
@@ -25,11 +32,11 @@ namespace HRIS.Domain.Mappings
                 .ForMember(dst => dst.Age, opt => opt.MapFrom(src => DateUtil.GetDayDifference(src.BirthDate)))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
-            CreateMap<Contact, ContactDto>()
+            CreateMap<ContactVersion, ContactDto>()
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
-            CreateMap<Address, AddressDto>()
+            CreateMap<AddressVersion, AddressDto>()
                 .ForMember(dst => dst.Address, opt => opt.MapFrom(src => src.GetFullAddress()))
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));

@@ -9,6 +9,8 @@ namespace HRIS.Domain.Interfaces.Repositories
         IMapper Mapper { get; }
         IConfigRepository Config { get; }
         IBaseRepository<Employee> Employee { get; }
+        IBaseRepository<Contact> Contact { get; }
+        IBaseRepository<Address> Address { get; }
         void Save();
     }
 }

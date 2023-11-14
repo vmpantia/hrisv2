@@ -15,6 +15,10 @@ namespace HRIS.Domain.Models.Dtos
         public string Gender { get; set; }
         [Required]
         public DateTime BirthDate { get; set; }
+        [Required]
+        public List<SaveContactDto> Contacts { get; set; }
+        [Required]
+        public List<SaveAddressDto> Addresses { get; set; }
     }
 
     public class ChangeCommonStatusDto

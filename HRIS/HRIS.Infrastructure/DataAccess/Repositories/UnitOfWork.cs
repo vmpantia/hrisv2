@@ -2,6 +2,7 @@
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Models.Entities;
 using HRIS.Infrastructure.DataAccess.Database;
+using System.Diagnostics.Contracts;
 
 namespace HRIS.Infrastructure.DataAccess.Repositories
 {
@@ -11,6 +12,8 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
         private readonly IMapper _mapper;
         private IConfigRepository _config;
         private IBaseRepository<Employee> _employee;
+        private IBaseRepository<Contact> _contact;
+        private IBaseRepository<Address> _address;
         public UnitOfWork(HRISDbContext context, IMapper mapper)
         {
             _context = context;
@@ -38,6 +41,28 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
                     _employee = new BaseRepository<Employee>(_context, _mapper);
 
                 return _employee;
+            }
+        }
+
+        public IBaseRepository<Contact> Contact
+        {
+            get
+            {
+                if (_contact == null)
+                    _contact = new BaseRepository<Contact>(_context, _mapper);
+
+                return _contact;
+            }
+        }
+
+        public IBaseRepository<Address> Address
+        {
+            get
+            {
+                if (_address == null)
+                    _address = new BaseRepository<Address>(_context, _mapper);
+
+                return _address;
             }
         }
 

@@ -16,7 +16,7 @@ namespace HRIS.Domain.Extensions
                                                                         string.Empty :
                                                                         ($" {employee.MiddleName.ToTitleCase()[0]}."))}";
 
-        public static string GetFullAddress(this Address address) =>
+        public static string GetFullAddress(this AddressVersion address) =>
             $"{address.Line1.ToTitleCase()} {(string.IsNullOrEmpty(address.Line2) ? string.Empty : address.Line2)}, {address.Barangay}, {address.City} {address.Province} {address.ZipCode} {address.Country}";
     }
 }

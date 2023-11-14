@@ -63,7 +63,7 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostEmployee([FromForm] SaveEmployeeDto request)
+        public IActionResult PostEmployee(SaveEmployeeDto request)
         {
             // Create employee
             var result = _employee.CreateEmployee(request, string.Empty);
@@ -75,7 +75,7 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutEmployee(Guid id, [FromForm] SaveEmployeeDto request)
+        public IActionResult PutEmployee(Guid id, SaveEmployeeDto request)
         {
             // Update employee
             _employee.UpdateEmployee(id, request, string.Empty);
