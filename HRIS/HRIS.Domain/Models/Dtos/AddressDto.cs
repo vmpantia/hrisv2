@@ -13,7 +13,6 @@
         public string ZipCode { get; set; }
         public string Country { get; set; }
         public string Type { get; set; }
-        public bool IsPrimary { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }

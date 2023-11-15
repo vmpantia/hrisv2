@@ -8,8 +8,8 @@ namespace HRIS.Domain.Interfaces.Repositories
         bool IsExist(ISpecification<TEntity> specification);
         IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification);
         TEntity GetOne(ISpecification<TEntity> specification);
-        void Create(TEntity entity, bool isAutoSave = false);
-        void Update(TEntity entity, bool isAutoSave = false);
-        void Version<TEntityVersion>(TEntity entity, bool isAutoSave = false) where TEntityVersion : class, IEntityVersion;
+        void Create(TEntity entity);
+        void Update(TEntity entity);
+        void Version<TEntityVersion>(TEntity entity) where TEntityVersion : class, IEntityVersion;
     }
 }

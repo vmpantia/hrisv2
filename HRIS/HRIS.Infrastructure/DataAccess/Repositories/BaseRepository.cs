@@ -55,23 +55,13 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             return _table.First(specification.Criteria);
         }
 
-        public void Create(TEntity entity, bool isAutoSave = false)
-        {
+        public void Create(TEntity entity) =>
             _table.Add(entity);
 
-            if (isAutoSave)
-                _context.SaveChanges();
-        }
-
-        public void Update(TEntity entity, bool isAutoSave = false)
-        {
+        public void Update(TEntity entity) =>
             _table.Update(entity);
 
-            if (isAutoSave)
-                _context.SaveChanges();
-        }
-
-        public void Version<TEntityVersion>(TEntity entity, bool isAutoSave = false) where TEntityVersion : class, IEntityVersion
+        public void Version<TEntityVersion>(TEntity entity) where TEntityVersion : class, IEntityVersion
         {
             var latestVersion = _mapper.Map<TEntityVersion>(entity);
 
@@ -80,9 +70,6 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
             // Create latest version
             _context.Set<TEntityVersion>().Add(latestVersion);
-
-            if (isAutoSave)
-                _context.SaveChanges();
         }
     }
 }
