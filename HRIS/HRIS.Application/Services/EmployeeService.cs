@@ -48,6 +48,9 @@ namespace HRIS.Application.Services
             employee.CreatedAt = DateUtil.GetCurrentDate();
             employee.CreatedBy = requestor;
 
+            // Create employee contacts (corporate email)
+            _contactService.CreateCorporateEmail(employee.Id, employee.FirstName, employee.LastName, employee.MiddleName);
+
             // Create employee contacts
             foreach (var contact in request.Contacts)
                 _contactService.CreateContact(employee.Id, contact, requestor);

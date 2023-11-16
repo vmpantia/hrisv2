@@ -1,4 +1,5 @@
 ﻿using HRIS.Domain.Exceptions;
+using HRIS.Domain.Extensions;
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Interfaces.Services;
 using HRIS.Domain.Interfaces.Specifications;
@@ -25,6 +26,43 @@ namespace HRIS.Application.Services
             _unitOfwork.Contact.GetByExpression(specification)
                                 .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .First();
+
+        public void CreateCorporateEmail(Guid employeeId, string firstName, string lastName, string? middleName)
+        {
+            // Get company domain
+            var domain = _unitOfwork.Config.GetValue<string>("SYSTEM", "COMPANY_DOMAIN");
+
+            // Remove special characters
+            var modifiedFName = firstName.RemoveSpecialCharacters();
+            var modifiedLName = lastName.RemoveSpecialCharacters();
+            var modifiedMName = middleName.RemoveSpecialCharacters();
+
+            // Get middle initial
+            var middleInitial = string.IsNullOrEmpty(modifiedMName) ? string.Empty : modifiedMName[0].ToString();
+
+            // Get unique id from employee id
+            var uniqueId = employeeId.ToString().Substring(0, 8);
+
+            // Generate corporate email for employee
+            var email = $"{modifiedFName}.{middleInitial}.{modifiedLName}.{uniqueId}@{domain}";
+
+            // Prepare contact to be create
+            var contact = new Contact
+            {
+                Id = Guid.NewGuid(),
+                EmployeeId = employeeId,
+                Value = email,
+                Type = ContactType.Email,
+                IsPrimary = true,
+                IsPersonal = false,
+                Status = CommonStatus.Active,
+                CreatedAt = DateUtil.GetCurrentDate(),
+                CreatedBy = "System"
+            };
+
+            _unitOfwork.Contact.Create(contact);
+            _unitOfwork.Contact.Version<ContactVersion>(contact);
+        }
 
         public void CreateContact(Guid employeeId, SaveContactDto request, string requestor, bool isAutoSave = false)
         {

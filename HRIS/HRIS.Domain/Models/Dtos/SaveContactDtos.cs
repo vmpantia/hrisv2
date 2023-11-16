@@ -14,5 +14,7 @@ namespace HRIS.Domain.Models.Dtos
         public ContactType Type { get; set; }
         [Required]
         public bool IsPrimary { get; set; }
+        [Required]
+        public bool IsPersonal { get; set; }
     }
 }

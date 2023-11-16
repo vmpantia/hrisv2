@@ -1,5 +1,6 @@
 ﻿using HRIS.Domain.Models.Entities;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace HRIS.Domain.Extensions
 {
@@ -18,5 +19,19 @@ namespace HRIS.Domain.Extensions
 
         public static string GetFullAddress(this Address address) =>
             $"{address.Line1.ToTitleCase()} {(string.IsNullOrEmpty(address.Line2) ? string.Empty : address.Line2)}, {address.Barangay}, {address.City} {address.Province} {address.ZipCode} {address.Country}";
+
+        public static string RemoveSpecialCharacters(this string? input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            // Remove spaces and special characters using regex
+            string pattern = "[^a-zA-Z0-9]";
+            string replacement = "";
+            Regex regex = new Regex(pattern);
+            string result = regex.Replace(input, replacement);
+
+            return result.ToLower();
+        }
     }
 }

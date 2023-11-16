@@ -6,7 +6,9 @@
         public Guid EmployeeId { get; set; }
         public string Value { get; set; }
         public string Type { get; set; }
+        public string Category { get; set; }
         public bool IsPrimary { get; set; }
+        public bool IsPersonal { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }

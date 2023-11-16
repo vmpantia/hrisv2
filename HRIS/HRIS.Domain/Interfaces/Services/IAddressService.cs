@@ -9,6 +9,7 @@ namespace HRIS.Domain.Interfaces.Services
     {
         List<TDto> GetContacts<TDto>(ISpecification<Contact> specification);
         TDto GetContact<TDto>(ISpecification<Contact> specification);
+        void CreateCorporateEmail(Guid employeeId, string firstName, string lastName, string? middleName);
         void CreateContact(Guid employeeId, SaveContactDto request, string requestor, bool isAutoSave = false);
         void SyncContacts(Guid employeeId, List<SaveContactDto> latestContacts, string requestor);
         void UpdateContact(Guid contactId, SaveContactDto request, string requestor, bool isAutoSave = false);

@@ -19,7 +19,9 @@ namespace HRIS.Domain.Mappings
                 .ReverseMap();
 
 
-            CreateMap<SaveEmployeeDto, Employee>();
+            CreateMap<SaveEmployeeDto, Employee>()
+                .ForMember(dst => dst.Contacts, opt => opt.Ignore())
+                .ForMember(dst => dst.Addresses, opt => opt.Ignore());
             CreateMap<SaveContactDto, Contact>();
             CreateMap<SaveAddressDto, Address>();
 
@@ -34,6 +36,7 @@ namespace HRIS.Domain.Mappings
 
             CreateMap<Contact, ContactDto>()
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
+                .ForMember(dst => dst.Category, opt => opt.MapFrom(src => src.IsPersonal ? "Personal" : "Corporate"))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
             CreateMap<Address, AddressDto>()

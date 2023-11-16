@@ -19,6 +19,7 @@ namespace HRIS.Infrastructure.DataAccess.Database
                 new Config { Section = "SYSTEM", Key = "ID_NUMBER_FORMAT", Value = "{0}-{1}-{2}" },
                 new Config { Section = "SYSTEM", Key = "ID_NUMBER_DIGIT", Value = "7" },
                 new Config { Section = "SYSTEM", Key = "ID_NUMBER_EMPLOYEE_PREFIX", Value = "EMP" },
+                new Config { Section = "SYSTEM", Key = "COMPANY_DOMAIN", Value = "companydomain.com.ph" },
             };
             #endregion
 

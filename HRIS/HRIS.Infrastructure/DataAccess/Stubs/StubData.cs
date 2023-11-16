@@ -35,6 +35,7 @@ namespace HRIS.Infrastructure.DataAccess.Stubs
 
                 })
                 .RuleFor(prop => prop.IsPrimary, faker => faker.Random.Bool())
+                .RuleFor(prop => prop.IsPersonal, faker => faker.Random.Bool())
                 .RuleFor(prop => prop.Status, faker => faker.Random.Enum<CommonStatus>())
                 .RuleFor(prop => prop.CreatedAt, faker => faker.Date.Future())
                 .RuleFor(prop => prop.CreatedBy, faker => faker.Internet.Email());

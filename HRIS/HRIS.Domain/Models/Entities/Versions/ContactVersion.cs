@@ -13,6 +13,7 @@ namespace HRIS.Domain.Models.Entities
         public string Value { get; set; }
         public ContactType Type { get; set; }
         public bool IsPrimary { get; set; }
+        public bool IsPersonal { get; set; }
         public CommonStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
