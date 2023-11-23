@@ -1,4 +1,5 @@
 ﻿using HRIS.Domain.Exceptions;
+using HRIS.Domain.Extensions;
 using HRIS.Domain.Helpers;
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Interfaces.Services;
@@ -84,7 +85,7 @@ namespace HRIS.Application.Services
 
             // Check if the employee is active
             if (employee.Status != CommonStatus.Active)
-                throw new ValidationException($"Employee cannot be updated since due to status ({employee.Status.ToString()}) is not editable.");
+                throw new ValidationException($"Employee cannot be updated since due to status ({employee.Status.GetDescription()}) is not editable.");
 
             // Update employee information
             employee.FirstName = request.FirstName;

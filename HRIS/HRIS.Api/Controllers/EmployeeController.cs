@@ -17,6 +17,21 @@ namespace HRIS.Api.Controllers
         public EmployeeController(IEmployeeService employee) =>
             _employee = employee;
 
+
+        [HttpGet("lite")]
+        public IActionResult GetEmployees()
+        {
+            // Set specification for getting employees
+            var specification = new BaseSpecification<Employee>();
+            specification.SetCriteria(data => data.Status == CommonStatus.Active)
+                         .SetOrderBy(data => data.CreatedAt);
+
+            // Get employees based on the specification
+            var result = _employee.GetEmployees<EmployeeLiteDto>(specification);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         public IActionResult GetEmployees([FromQuery] FilterWithPagination request)
         {
@@ -29,20 +44,6 @@ namespace HRIS.Api.Controllers
 
             // Get employees based on the specification
             var result = _employee.GetEmployees<EmployeeDto>(specification);
-
-            return Ok(result);
-        }
-
-        [HttpGet("lite")]
-        public IActionResult GetEmployees()
-        {
-            // Set specification for getting employees
-            var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Status == CommonStatus.Active)
-                         .SetOrderBy(data => data.CreatedAt);
-
-            // Get employees based on the specification
-            var result = _employee.GetEmployees<EmployeeLiteDto>(specification);
 
             return Ok(result);
         }
@@ -80,7 +81,7 @@ namespace HRIS.Api.Controllers
             // Update employee
             _employee.UpdateEmployee(id, request, string.Empty);
 
-            return Ok("Employee successfully updated");
+            return Ok("Employee successfully updated.");
         }
 
         [HttpPatch("{id}")]
@@ -89,7 +90,7 @@ namespace HRIS.Api.Controllers
             // Update employee status
             _employee.UpdateEmployeeStatus(id, request.NewStatus, string.Empty);
 
-            return Ok("Employee successfully updated");
+            return Ok("Employee successfully updated.");
         }
     }
 }
