@@ -18,14 +18,16 @@ namespace HRIS.Application.Services
             _unitOfwork = unitOfwork;
 
         public List<TDto> GetContacts<TDto>(ISpecification<Contact> specification) =>
-            _unitOfwork.Contact.GetByExpression(specification)
+            _unitOfwork.Contact.GetList(specification)
                                 .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .ToList();
 
-        public TDto GetContact<TDto>(ISpecification<Contact> specification) =>
-            _unitOfwork.Contact.GetByExpression(specification)
-                                .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
-                                .First();
+        public TDto GetContact<TDto>(ISpecification<Contact> specification)
+        {
+            var contact = _unitOfwork.Contact.GetOne(specification);
+
+            return _unitOfwork.Mapper.Map<TDto>(contact);
+        }
 
         public void CreateCorporateEmail(Guid employeeId, string firstName, string lastName, string? middleName)
         {
@@ -88,7 +90,7 @@ namespace HRIS.Application.Services
         {
             // Prepare contact specification
             var specification = new BaseSpecification<Contact>();
-            specification.SetCriteria(data => data.Id == contactId);
+            specification.AddCriteria(data => data.Id == contactId);
 
             // Check if the contact exist
             if (!_unitOfwork.Contact.IsExist(specification))
@@ -119,7 +121,7 @@ namespace HRIS.Application.Services
         {
             // Prepare contact specification
             var specification = new BaseSpecification<Contact>();
-            specification.SetCriteria(data => data.Id == contactId);
+            specification.AddCriteria(data => data.Id == contactId);
 
             // Check if the contact exist
             if (!_unitOfwork.Contact.IsExist(specification))
@@ -153,10 +155,10 @@ namespace HRIS.Application.Services
         {
             // Prepare contact specification
             var specification = new BaseSpecification<Contact>();
-            specification.SetCriteria(data => data.EmployeeId == employeeId);
+            specification.AddCriteria(data => data.EmployeeId == employeeId);
 
             // Get current contacts from the database
-            var currentContacts = _unitOfwork.Contact.GetByExpression(specification);
+            var currentContacts = _unitOfwork.Contact.GetList(specification);
 
             // Get currentIds and latestIds from the parameters
             var currentIds = currentContacts.Select(data => data.Id).Distinct().ToList();

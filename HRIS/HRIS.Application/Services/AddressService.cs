@@ -17,14 +17,16 @@ namespace HRIS.Application.Services
             _unitOfwork = unitOfwork;
 
         public List<TDto> GetAddresss<TDto>(ISpecification<Address> specification) =>
-            _unitOfwork.Address.GetByExpression(specification)
+            _unitOfwork.Address.GetList(specification)
                                 .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .ToList();
 
-        public TDto GetAddress<TDto>(ISpecification<Address> specification) =>
-            _unitOfwork.Address.GetByExpression(specification)
-                                .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
-                                .First();
+        public TDto GetAddress<TDto>(ISpecification<Address> specification)
+        {
+            var address = _unitOfwork.Address.GetOne(specification);
+
+            return _unitOfwork.Mapper.Map<TDto>(address);
+        }
 
         public void CreateAddress(Guid employeeId, SaveAddressDto request, string requestor, bool isAutoSave = false)
         {
@@ -50,7 +52,7 @@ namespace HRIS.Application.Services
         {
             // Prepare address specification
             var specification = new BaseSpecification<Address>();
-            specification.SetCriteria(data => data.Id == addressId);
+            specification.AddCriteria(data => data.Id == addressId);
 
             // Check if the address exist
             if (!_unitOfwork.Address.IsExist(specification))
@@ -86,7 +88,7 @@ namespace HRIS.Application.Services
         {
             // Prepare address specification
             var specification = new BaseSpecification<Address>();
-            specification.SetCriteria(data => data.Id == addressId);
+            specification.AddCriteria(data => data.Id == addressId);
 
             // Check if the address exist
             if (!_unitOfwork.Address.IsExist(specification))
@@ -120,10 +122,10 @@ namespace HRIS.Application.Services
         {
             // Prepare address specification
             var specification = new BaseSpecification<Address>();
-            specification.SetCriteria(data => data.EmployeeId == employeeId);
+            specification.AddCriteria(data => data.EmployeeId == employeeId);
 
             // Get current addresss from the database
-            var currentAddresss = _unitOfwork.Address.GetByExpression(specification);
+            var currentAddresss = _unitOfwork.Address.GetList(specification);
 
             // Get currentIds and latestIds from the parameters
             var currentIds = currentAddresss.Select(data => data.Id).Distinct().ToList();

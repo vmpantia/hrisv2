@@ -16,26 +16,28 @@ namespace HRIS.Application.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfwork;
-        private readonly IDNumberHelper _numberHelper;
+        private readonly CustomIDHelper _numberHelper;
         private readonly IContactService _contactService;
         private readonly IAddressService _addressService;
         public EmployeeService(IUnitOfWork unitOfwork)
         {
             _unitOfwork = unitOfwork;
-            _numberHelper = new IDNumberHelper(unitOfwork);
+            _numberHelper = new CustomIDHelper(unitOfwork);
             _contactService = new ContactService(unitOfwork);
             _addressService = new AddressService(unitOfwork);
         }
 
         public List<TDto> GetEmployees<TDto>(ISpecification<Employee> specification) => 
-            _unitOfwork.Employee.GetByExpression(specification)
+            _unitOfwork.Employee.GetList(specification)
                                 .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .ToList();
 
-        public TDto GetEmployee<TDto>(ISpecification<Employee> specification) =>
-            _unitOfwork.Employee.GetByExpression(specification)
-                                .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
-                                .First();
+        public TDto GetEmployee<TDto>(ISpecification<Employee> specification)
+        {
+            var employee = _unitOfwork.Employee.GetOne(specification);
+
+            return _unitOfwork.Mapper.Map<TDto>(employee);
+        }
 
         public Guid CreateEmployee(SaveEmployeeDto request, string requestor)
         {
@@ -44,7 +46,7 @@ namespace HRIS.Application.Services
 
             // Set initial data when creating employee
             employee.Id = Guid.NewGuid();
-            employee.Number = _numberHelper.GenerateIdNumber("ID_NUMBER_EMPLOYEE_PREFIX");
+            employee.Number = _numberHelper.GenerateCustomID("ID_NUMBER_EMPLOYEE_PREFIX");
             employee.Status = CommonStatus.Active;
             employee.CreatedAt = DateUtil.GetCurrentDate();
             employee.CreatedBy = requestor;
@@ -74,7 +76,7 @@ namespace HRIS.Application.Services
         {
             // Prepare employee specification
             var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Id == employeeId);
+            specification.AddCriteria(data => data.Id == employeeId);
 
             // Check if the employee exist
             if (!_unitOfwork.Employee.IsExist(specification))
@@ -112,7 +114,7 @@ namespace HRIS.Application.Services
         {
             // Prepare employee specification
             var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Id == employeeId && data.Status == CommonStatus.Active);
+            specification.AddCriteria(data => data.Id == employeeId && data.Status == CommonStatus.Active);
 
             // Check if the employee exist
             if (!_unitOfwork.Employee.IsExist(specification))

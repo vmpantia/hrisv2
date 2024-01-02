@@ -23,8 +23,8 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Status == CommonStatus.Active)
-                         .SetOrderBy(data => data.CreatedAt);
+            specification.AddCriteria(data => data.Status == CommonStatus.Active)
+                         .AddOrderBy(data => data.CreatedAt);
 
             // Get employees based on the specification
             var result = _employee.GetEmployees<EmployeeLiteDto>(specification);
@@ -37,10 +37,10 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.SetOrderBy(data => data.CreatedAt)
-                         .SetPagination(request)
+            specification.AddOrderBy(data => data.CreatedAt)
                          .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
-                         .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active));
+                         .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active))
+                         .SetPagination(request);
 
             // Get employees based on the specification
             var result = _employee.GetEmployees<EmployeeDto>(specification);
@@ -53,7 +53,7 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.SetCriteria(data => data.Id == id)
+            specification.AddCriteria(data => data.Id == id)
                          .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
                          .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active));
 

@@ -3,19 +3,19 @@ using HRIS.Domain.Utils;
 
 namespace HRIS.Domain.Helpers
 {
-    public class IDNumberHelper
+    public class CustomIDHelper
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly string _format;
         private readonly int _digit;
-        public IDNumberHelper(IUnitOfWork unitOfwork)
+        public CustomIDHelper(IUnitOfWork unitOfwork)
         {
             _unitOfWork = unitOfwork;
             _format = unitOfwork.Config.GetValue<string>("SYSTEM", "ID_NUMBER_FORMAT");
             _digit = unitOfwork.Config.GetValue<int>("SYSTEM", "ID_NUMBER_DIGIT");
         }
 
-        public string GenerateIdNumber(string keyPrefix)
+        public string GenerateCustomID(string keyPrefix)
         {
             var number = string.Empty;
             var prefix = _unitOfWork.Config.GetValue<string>("SYSTEM", keyPrefix);

@@ -1,13 +1,11 @@
-﻿using Microsoft.VisualBasic;
-
-namespace HRIS.Domain.Utils
+﻿namespace HRIS.Domain.Utils
 {
-    public class DateUtil
+    public static class DateUtil
     {
         public static DateTime GetCurrentDate() =>
              TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
 
-        public static int GetDayDifference(DateTime date) =>
-            (GetCurrentDate() - date).Days;
+        public static int GetDayDifference(this DateTime inputDateTime, DateTime compareDateTime) =>
+            (compareDateTime.Date - inputDateTime.Date).Days;
     }
 }

@@ -22,37 +22,47 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
         public bool IsExist(ISpecification<TEntity> specification)
         {
-            if (specification.Criteria == null)
+            bool isExist = false;
+
+            if (specification.Criteria == null || !specification.Criteria.Any())
                 throw new Exception("Specification criteria cannot be NULL when checking if the data exist.");
 
-            return _table.Any(specification.Criteria);
+            foreach (var data in specification.Criteria)
+            {
+                if (isExist)
+                    return isExist;
+
+                isExist = _table.Any(data);
+            }
+
+            return isExist;
         }
 
-        public IEnumerable<TEntity> GetByExpression(ISpecification<TEntity> specification)
+        public IEnumerable<TEntity> GetList(ISpecification<TEntity> specification)
         {
             var result = _table.AsNoTracking();
 
-            if (specification.Criteria != null)
-                result = _table.Where(specification.Criteria);
+            if (specification.Criteria != null && specification.Criteria.Any())
+                specification.Criteria.ForEach(data => { result = _table.Where(data); });
+
+            if (specification.OrderBy != null && specification.OrderBy.Any())
+                specification.OrderBy.ForEach(data => { result = _table.OrderBy(data); });
+
+            if (specification.OrderByDescending != null && specification.OrderByDescending.Any())
+                specification.OrderByDescending.ForEach(data => { result = _table.OrderByDescending(data); });
 
             if (specification.IsPaginationEnabled)
                 result = result.Take(specification.Take).Skip(specification.Skip);
-
-            if (specification.OrderBy != null)
-                result = result.OrderBy(specification.OrderBy);
-
-            if (specification.OrderByDescending != null)
-                result = result.OrderByDescending(specification.OrderByDescending);
 
             return specification.Includes.Aggregate(result, (current, include) => current.Include(include));
         }
 
         public TEntity GetOne(ISpecification<TEntity> specification)
         {
-            if (specification.Criteria == null)
+            if (specification.Criteria == null || !specification.Criteria.Any())
                 throw new Exception("Specification criteria cannot be NULL when getting one record.");
 
-            return _table.First(specification.Criteria);
+            return GetList(specification).First();
         }
 
         public void Create(TEntity entity) =>
