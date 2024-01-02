@@ -1,30 +1,27 @@
-﻿using HRIS.Domain.Models.Enums;
+﻿using HRIS.Domain.Models.Enums.Filters;
 using System.Linq.Expressions;
 
 namespace HRIS.Domain.Extensions
 {
     public static class FilterExtension
     {
-        public static IEnumerable<TSource> DynamicFilter<TSource>(this IEnumerable<TSource> source, string propertyName, object? propertyValue, ConditionFilterType condition)
+        public static Expression<Func<TEntity, bool>> GenerateExpressionFilter<TEntity>(string propertyName, object? propertyValue, ConditionFilterType condition)
         {
             try
             {
-                var (expression, entity) = GetFilterConfiguration<TSource>(propertyName, propertyValue, condition);
-                var lambda = Expression.Lambda<Func<TSource, bool>>(expression, entity);
-                var filteredEntities = source.Where(lambda.Compile());
-
-                return filteredEntities;
+                var (expression, entity) = GetFilterConfiguration<TEntity>(propertyName, propertyValue, condition);
+                return Expression.Lambda<Func<TEntity, bool>>(expression, entity);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in processing dynamic filter. {ex.Message}");
+                throw new Exception($"Error in generating expression filter. {ex.Message}");
             }
         }
 
-        private static (Expression, ParameterExpression) GetFilterConfiguration<TSource>(string propertyName, object? propertyValue, ConditionFilterType condition)
+        private static (Expression, ParameterExpression) GetFilterConfiguration<TEntity>(string propertyName, object? propertyValue, ConditionFilterType condition)
         {
             // Get entity and name as data
-            var entity = Expression.Parameter(typeof(TSource), "data");
+            var entity = Expression.Parameter(typeof(TEntity), "data");
 
             // Get property to be use in expression
             var property = Expression.Property(entity, propertyName);

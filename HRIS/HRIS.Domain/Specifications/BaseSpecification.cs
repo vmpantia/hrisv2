@@ -1,12 +1,25 @@
 ﻿using System.Linq.Expressions;
+using HRIS.Domain.Extensions;
 using HRIS.Domain.Interfaces.Specifications;
 using HRIS.Domain.Models.Common;
+using HRIS.Domain.Models.Common.Filters;
+using HRIS.Domain.Models.Enums.Filters;
+using HRIS.Domain.Strategies.Filters;
 
 namespace HRIS.Domain.Specifications
 {
     public class BaseSpecification<TEntity> : ISpecification<TEntity>
     {
-        public List<Expression<Func<TEntity, bool>>> Criteria { get; private set; } = new List<Expression<Func<TEntity, bool>>>();
+        private readonly Dictionary<Type, FilterValidationStrategy> _filterValidationStrategies;
+        public BaseSpecification()
+        {
+            _filterValidationStrategies = new Dictionary<Type, FilterValidationStrategy>
+            {
+                { typeof(EmployeeFilterPropertyType), new EmployeeFilterValidationStrategy() },
+            };
+        }
+
+        public List<Expression<Func<TEntity, bool>>> Expressions { get; private set; } = new List<Expression<Func<TEntity, bool>>>();
 
         public List<Expression<Func<TEntity, object>>> Includes { get; } = new List<Expression<Func<TEntity, object>>>();
 
@@ -25,9 +38,27 @@ namespace HRIS.Domain.Specifications
             return this;
         }
 
-        public BaseSpecification<TEntity> AddCriteria(Expression<Func<TEntity, bool>> criteriaExpression)
+        public BaseSpecification<TEntity> AddExpression(Expression<Func<TEntity, bool>> expression)
         {
-            Criteria.Add(criteriaExpression);
+            Expressions.Add(expression);
+            return this;
+        }
+
+        public BaseSpecification<TEntity> AddExpressionFilters<TProperty>(List<CustomFilter<TProperty>> filters) where TProperty : Enum 
+        {
+            foreach(var filter in filters)
+            {
+                // Get strategy
+                var strategy = _filterValidationStrategies.GetValueOrDefault(typeof(TProperty));
+                if (strategy == null)
+                    throw new NotImplementedException("Filter validation strategy not found.");
+
+                // Get expression by strategy
+                var expression = FilterExtension.GenerateExpressionFilter<TEntity>(filter.Property.GetDescription(), 
+                                                                                   strategy.GetValue(filter), 
+                                                                                   filter.Condition);
+                Expressions.Add(expression);
+            }
             return this;
         }
 

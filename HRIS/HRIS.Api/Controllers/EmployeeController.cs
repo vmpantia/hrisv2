@@ -1,6 +1,5 @@
 using HRIS.Domain.Interfaces.Services;
-using HRIS.Domain.Interfaces.Specifications;
-using HRIS.Domain.Models.Common;
+using HRIS.Domain.Models.Common.Filters;
 using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
 using HRIS.Domain.Models.Enums;
@@ -23,7 +22,7 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.AddCriteria(data => data.Status == CommonStatus.Active)
+            specification.AddExpression(data => data.Status == CommonStatus.Active)
                          .AddOrderBy(data => data.CreatedAt);
 
             // Get employees based on the specification
@@ -32,15 +31,16 @@ namespace HRIS.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        public IActionResult GetEmployees([FromQuery] FilterWithPagination request)
+        [HttpPost("filter")]
+        public IActionResult PostFilterEmployees([FromBody] EmployeeFilter request)
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.AddOrderBy(data => data.CreatedAt)
+            specification.AddExpressionFilters(request.Filters)
+                         .AddOrderBy(data => data.CreatedAt)
                          .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
                          .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active))
-                         .SetPagination(request);
+                         .SetPagination(request.Pagination);
 
             // Get employees based on the specification
             var result = _employee.GetEmployees<EmployeeDto>(specification);
@@ -53,7 +53,7 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.AddCriteria(data => data.Id == id)
+            specification.AddExpression(data => data.Id == id)
                          .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
                          .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active));
 

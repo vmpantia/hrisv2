@@ -24,10 +24,10 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
         {
             bool isExist = false;
 
-            if (specification.Criteria == null || !specification.Criteria.Any())
-                throw new Exception("Specification criteria cannot be NULL when checking if the data exist.");
+            if (specification.Expressions == null || !specification.Expressions.Any())
+                throw new Exception("Specification expression cannot be NULL when checking if the data exist.");
 
-            foreach (var data in specification.Criteria)
+            foreach (var data in specification.Expressions)
             {
                 if (isExist)
                     return isExist;
@@ -42,8 +42,8 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
         {
             var result = _table.AsNoTracking();
 
-            if (specification.Criteria != null && specification.Criteria.Any())
-                specification.Criteria.ForEach(data => { result = _table.Where(data); });
+            if (specification.Expressions != null && specification.Expressions.Any())
+                specification.Expressions.ForEach(data => { result = _table.Where(data); });
 
             if (specification.OrderBy != null && specification.OrderBy.Any())
                 specification.OrderBy.ForEach(data => { result = _table.OrderBy(data); });
@@ -59,8 +59,8 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
         public TEntity GetOne(ISpecification<TEntity> specification)
         {
-            if (specification.Criteria == null || !specification.Criteria.Any())
-                throw new Exception("Specification criteria cannot be NULL when getting one record.");
+            if (specification.Expressions == null || !specification.Expressions.Any())
+                throw new Exception("Specification expression cannot be NULL when getting one record.");
 
             return GetList(specification).First();
         }

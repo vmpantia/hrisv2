@@ -1,10 +1,10 @@
-﻿namespace HRIS.Domain.Models.Enums
+﻿namespace HRIS.Domain.Models.Enums.Filters
 {
     public enum ConditionFilterType
     {
-        Equal, 
+        Equal,
         NotEqual,
-        Contains, 
+        Contains,
         NotContains
     }
 }

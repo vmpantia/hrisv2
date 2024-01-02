@@ -5,7 +5,7 @@ namespace HRIS.Domain.Interfaces.Specifications
 {
     public interface ISpecification<TEntity>
     {
-        List<Expression<Func<TEntity, bool>>> Criteria { get; }
+        List<Expression<Func<TEntity, bool>>> Expressions { get; }
         List<Expression<Func<TEntity, object>>> Includes { get; }
         List<Expression<Func<TEntity, object>>> OrderBy { get; }
         List<Expression<Func<TEntity, object>>> OrderByDescending { get; }

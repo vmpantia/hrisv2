@@ -90,7 +90,7 @@ namespace HRIS.Application.Services
         {
             // Prepare contact specification
             var specification = new BaseSpecification<Contact>();
-            specification.AddCriteria(data => data.Id == contactId);
+            specification.AddExpression(data => data.Id == contactId);
 
             // Check if the contact exist
             if (!_unitOfwork.Contact.IsExist(specification))
@@ -121,7 +121,7 @@ namespace HRIS.Application.Services
         {
             // Prepare contact specification
             var specification = new BaseSpecification<Contact>();
-            specification.AddCriteria(data => data.Id == contactId);
+            specification.AddExpression(data => data.Id == contactId);
 
             // Check if the contact exist
             if (!_unitOfwork.Contact.IsExist(specification))
@@ -155,7 +155,7 @@ namespace HRIS.Application.Services
         {
             // Prepare contact specification
             var specification = new BaseSpecification<Contact>();
-            specification.AddCriteria(data => data.EmployeeId == employeeId);
+            specification.AddExpression(data => data.EmployeeId == employeeId);
 
             // Get current contacts from the database
             var currentContacts = _unitOfwork.Contact.GetList(specification);

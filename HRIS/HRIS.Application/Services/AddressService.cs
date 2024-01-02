@@ -52,7 +52,7 @@ namespace HRIS.Application.Services
         {
             // Prepare address specification
             var specification = new BaseSpecification<Address>();
-            specification.AddCriteria(data => data.Id == addressId);
+            specification.AddExpression(data => data.Id == addressId);
 
             // Check if the address exist
             if (!_unitOfwork.Address.IsExist(specification))
@@ -88,7 +88,7 @@ namespace HRIS.Application.Services
         {
             // Prepare address specification
             var specification = new BaseSpecification<Address>();
-            specification.AddCriteria(data => data.Id == addressId);
+            specification.AddExpression(data => data.Id == addressId);
 
             // Check if the address exist
             if (!_unitOfwork.Address.IsExist(specification))
@@ -122,7 +122,7 @@ namespace HRIS.Application.Services
         {
             // Prepare address specification
             var specification = new BaseSpecification<Address>();
-            specification.AddCriteria(data => data.EmployeeId == employeeId);
+            specification.AddExpression(data => data.EmployeeId == employeeId);
 
             // Get current addresss from the database
             var currentAddresss = _unitOfwork.Address.GetList(specification);
