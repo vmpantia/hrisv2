@@ -44,6 +44,8 @@ namespace HRIS.Infrastructure.DataAccess.Database
         public DbSet<AddressVersion> AddressVersions { get; set; }
         #endregion
 
+        public DbSet<AppLog> AppLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Table Configurations
