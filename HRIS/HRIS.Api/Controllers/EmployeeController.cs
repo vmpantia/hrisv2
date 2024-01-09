@@ -3,6 +3,7 @@ using HRIS.Domain.Models.Common.Filters;
 using HRIS.Domain.Models.Dtos;
 using HRIS.Domain.Models.Entities;
 using HRIS.Domain.Models.Enums;
+using HRIS.Domain.Models.Enums.Filters;
 using HRIS.Domain.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +33,7 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPost("filter")]
-        public IActionResult PostFilterEmployees([FromBody] EmployeeFilter request)
+        public IActionResult PostFilterEmployees([FromBody] ResourceFilter<EmployeeFilterPropertyType> request)
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();

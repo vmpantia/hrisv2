@@ -43,13 +43,13 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             IEnumerable<TEntity> result = _table.AsNoTracking();
 
             if (specification.Expressions != null && specification.Expressions.Any())
-                foreach (var expression in specification.Expressions) { result = result.Where(expression.Compile()); }
+                specification.Expressions.ForEach(exp => { result = result.Where(exp.Compile()); });
 
             if (specification.OrderBy != null && specification.OrderBy.Any())
-                foreach (var expression in specification.OrderBy) { result = result.OrderBy(expression.Compile()); }
+                specification.OrderBy.ForEach(exp => { result = result.OrderBy(exp.Compile()); });
 
             if (specification.OrderByDescending != null && specification.OrderByDescending.Any())
-                foreach (var expression in specification.OrderByDescending) { result = result.OrderByDescending(expression.Compile()); }
+                specification.OrderByDescending.ForEach(exp => { result = result.OrderByDescending(exp.Compile()); });
 
             if (specification.IsPaginationEnabled)
                 result = result.Take(specification.Take).Skip(specification.Skip);
