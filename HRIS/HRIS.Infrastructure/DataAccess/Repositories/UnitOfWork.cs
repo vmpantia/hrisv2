@@ -2,7 +2,7 @@
 using HRIS.Domain.Interfaces.Repositories;
 using HRIS.Domain.Models.Entities;
 using HRIS.Infrastructure.DataAccess.Database;
-using System.Diagnostics.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace HRIS.Infrastructure.DataAccess.Repositories
 {
@@ -10,14 +10,18 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
     {
         private readonly HRISDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         private IConfigRepository _config;
         private IBaseRepository<Employee> _employee;
         private IBaseRepository<Contact> _contact;
         private IBaseRepository<Address> _address;
-        public UnitOfWork(HRISDbContext context, IMapper mapper)
+        private IAppLogRepository _appLog;
+
+        public UnitOfWork(HRISDbContext context, IMapper mapper, ILogger logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public IMapper Mapper { get { return _mapper; } }
@@ -63,6 +67,17 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
                     _address = new BaseRepository<Address>(_context, _mapper);
 
                 return _address;
+            }
+        }
+
+        public IAppLogRepository AppLog
+        {
+            get
+            {
+                if (_appLog == null)
+                    _appLog = new AppLogRepository(_context, _mapper, _logger);
+
+                return _appLog;
             }
         }
 
