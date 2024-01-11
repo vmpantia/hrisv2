@@ -15,7 +15,7 @@ namespace HRIS.Domain.Specifications
         {
             _filterValidationStrategies = new Dictionary<Type, FilterValidationStrategy>
             {
-                { typeof(EmployeeFilterProperty), new EmployeeFilterValidationStrategy() },
+                { typeof(EmployeeFilterPropertyType), new EmployeeFilterValidationStrategy() },
             };
         }
 
@@ -44,7 +44,7 @@ namespace HRIS.Domain.Specifications
             return this;
         }
 
-        public BaseSpecification<TEntity> AddExpressionFilters<TProperty>(List<GenericFilterProperty<TProperty>> filters) where TProperty : Enum 
+        public BaseSpecification<TEntity> AddExpressionFilters<TProperty>(List<CustomFilter<TProperty>> filters) where TProperty : Enum 
         {
             foreach(var filter in filters)
             {

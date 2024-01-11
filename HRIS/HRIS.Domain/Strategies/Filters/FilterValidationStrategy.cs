@@ -6,15 +6,14 @@ namespace HRIS.Domain.Strategies.Filters
 {
     public abstract class FilterValidationStrategy
     {
-        public abstract object GetValue<TProperty>(GenericFilterProperty<TProperty> filters) where TProperty : Enum;
+        public abstract object GetValue<TProperty>(CustomFilter<TProperty> filters) where TProperty : Enum;
     }
 
     public class EmployeeFilterValidationStrategy : FilterValidationStrategy
     {
-        public override object GetValue<TProperty>(GenericFilterProperty<TProperty> filter)
+        public override object GetValue<TProperty>(CustomFilter<TProperty> filter)
         {
-            EmployeeFilterProperty property = filter.Property.GetDescription()
-                                                             .GetEnumValue<EmployeeFilterProperty>();
+            EmployeeFilterPropertyType property = filter.Property.GetDescription().GetEnumValue<EmployeeFilterPropertyType>();
             return (property, filter.Condition) switch
             {
                 (_, _) => filter.Value!

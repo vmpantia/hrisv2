@@ -5,7 +5,7 @@ namespace HRIS.Domain.Extensions
 {
     public static class FilterExtension
     {
-        public static Expression<Func<TEntity, bool>> GenerateExpressionFilter<TEntity>(string propertyName, object? propertyValue, ConditionFilter condition)
+        public static Expression<Func<TEntity, bool>> GenerateExpressionFilter<TEntity>(string propertyName, object? propertyValue, ConditionFilterType condition)
         {
             try
             {
@@ -18,7 +18,7 @@ namespace HRIS.Domain.Extensions
             }
         }
 
-        private static (Expression, ParameterExpression) GetFilterConfiguration<TEntity>(string propertyName, object? propertyValue, ConditionFilter condition)
+        private static (Expression, ParameterExpression) GetFilterConfiguration<TEntity>(string propertyName, object? propertyValue, ConditionFilterType condition)
         {
             // Get entity and name as data
             var entity = Expression.Parameter(typeof(TEntity), "data");
@@ -32,10 +32,10 @@ namespace HRIS.Domain.Extensions
             // Get epxression based on the condition value
             Expression expression = condition switch
             {
-                ConditionFilter.Equal => GetEqualExpression(property, value),
-                ConditionFilter.NotEqual => GetNotEqualExpression(property, value),
-                ConditionFilter.Contains => GetContainsMethod(property, value),
-                ConditionFilter.NotContains => GetNotContainsMethod(property, value),
+                ConditionFilterType.Equal => GetEqualExpression(property, value),
+                ConditionFilterType.NotEqual => GetNotEqualExpression(property, value),
+                ConditionFilterType.Contains => GetContainsMethod(property, value),
+                ConditionFilterType.NotContains => GetNotContainsMethod(property, value),
                 _ => throw new NotImplementedException(),
             };
 

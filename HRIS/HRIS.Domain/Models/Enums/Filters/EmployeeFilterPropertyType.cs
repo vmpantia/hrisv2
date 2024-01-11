@@ -2,7 +2,7 @@
 
 namespace HRIS.Domain.Models.Enums.Filters
 {
-    public enum EmployeeFilterProperty
+    public enum EmployeeFilterPropertyType
     {
         [Description("Number")]
         Id,
