@@ -16,15 +16,21 @@ namespace HRIS.Application.Services
         public AddressService(IUnitOfWork unitOfwork) =>
             _unitOfwork = unitOfwork;
 
-        public List<TDto> GetAddresss<TDto>(ISpecification<Address> specification) =>
+        public List<TDto> GetAddresses<TDto>(ISpecification<Address> specification) =>
             _unitOfwork.Address.GetList(specification)
                                 .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
                                 .ToList();
 
         public TDto GetAddress<TDto>(ISpecification<Address> specification)
         {
+            // Check if the address exist
+            if (!_unitOfwork.Address.IsExist(specification))
+                throw new NotFoundException("Address not found in the database.");
+
+            // Get address from the database
             var address = _unitOfwork.Address.GetOne(specification);
 
+            // Map Address to AddressDto
             return _unitOfwork.Mapper.Map<TDto>(address);
         }
 

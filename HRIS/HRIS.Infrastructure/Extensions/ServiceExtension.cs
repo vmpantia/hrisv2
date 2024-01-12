@@ -20,6 +20,9 @@ namespace HRIS.Infrastructure.Extensions
             // Add repositories
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // Add logger
+            services.AddLogging();
+
             return services;
         }
     }

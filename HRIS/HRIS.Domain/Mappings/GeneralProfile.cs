@@ -31,7 +31,7 @@ namespace HRIS.Domain.Mappings
 
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.GetFullName()))
-                .ForMember(dst => dst.Age, opt => opt.MapFrom(src => src.BirthDate.GetDayDifference(DateUtil.GetCurrentDate())))
+                .ForMember(dst => dst.Age, opt => opt.MapFrom(src => src.BirthDate.GetYearDiff(DateUtil.GetCurrentDate())))
                 .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
             CreateMap<Contact, ContactDto>()

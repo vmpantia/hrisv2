@@ -7,7 +7,7 @@ namespace HRIS.Domain.Interfaces.Services
 {
     public interface IAddressService
     {
-        List<TDto> GetAddresss<TDto>(ISpecification<Address> specification);
+        List<TDto> GetAddresses<TDto>(ISpecification<Address> specification);
         TDto GetAddress<TDto>(ISpecification<Address> specification);
         void CreateAddress(Guid employeeId, SaveAddressDto request, string requestor, bool isAutoSave = false);
         void SyncAddresss(Guid employeeId, List<SaveAddressDto> latestAddresss, string requestor);

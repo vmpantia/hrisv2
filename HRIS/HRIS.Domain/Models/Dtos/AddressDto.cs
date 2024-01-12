@@ -14,7 +14,5 @@
         public string Country { get; set; }
         public string Type { get; set; }
         public string Status { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string CreatedBy { get; set; }
     }
 }

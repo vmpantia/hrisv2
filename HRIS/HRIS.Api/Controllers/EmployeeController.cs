@@ -14,10 +14,16 @@ namespace HRIS.Api.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employee;
-        public EmployeeController(IEmployeeService employee) =>
+        private readonly IContactService _contact;
+        private readonly IAddressService _address;
+        public EmployeeController(IEmployeeService employee, IContactService contact, IAddressService address)
+        {
             _employee = employee;
+            _contact = contact;
+            _address = address;
+        }
 
-
+        #region Employee
         [HttpGet("lite")]
         public IActionResult GetEmployees()
         {
@@ -39,8 +45,6 @@ namespace HRIS.Api.Controllers
             var specification = new BaseSpecification<Employee>();
             specification.AddExpressionFilters(request.Filters)
                          .AddOrderBy(data => data.CreatedAt)
-                         .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
-                         .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active))
                          .SetPagination(request.Pagination);
 
             // Get employees based on the specification
@@ -54,9 +58,8 @@ namespace HRIS.Api.Controllers
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.AddExpression(data => data.Id == id)
-                         .AddInclude(tbl => tbl.Contacts.Where(data => data.Status == CommonStatus.Active))
-                         .AddInclude(tbl => tbl.Addresses.Where(data => data.Status == CommonStatus.Active));
+            specification.AddExpression(data => data.Id == id &&
+                                                data.Status == CommonStatus.Active);
 
             // Get employee based on the specification
             var result = _employee.GetEmployee<EmployeeDto>(specification);
@@ -70,9 +73,10 @@ namespace HRIS.Api.Controllers
             // Create employee
             var result = _employee.CreateEmployee(request, string.Empty);
 
-            return Ok(new { 
-                message = "Employee successfully created.", 
-                id = result 
+            return Ok(new
+            {
+                message = "Employee successfully created.",
+                id = result
             });
         }
 
@@ -93,5 +97,72 @@ namespace HRIS.Api.Controllers
 
             return Ok("Employee successfully updated.");
         }
+        #endregion
+
+        #region Employee Contact
+        [HttpGet("{employeeId}/contacts")]
+        public IActionResult GetEmployeeContacts(Guid employeeId)
+        {
+            // Set specification for getting contacts
+            var specification = new BaseSpecification<Contact>();
+            specification.AddExpression(data => data.EmployeeId == employeeId &&
+                                                data.Status == CommonStatus.Active &&
+                                                data.Employee.Status == CommonStatus.Active);
+
+            // Get contacts based on the specification
+            var result = _contact.GetContacts<ContactDto>(specification);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{employeeId}/contact/primary")]
+        public IActionResult GetEmployeePrimaryContact(Guid employeeId)
+        {
+            // Set specification for getting contacts
+            var specification = new BaseSpecification<Contact>();
+            specification.AddExpression(data => data.EmployeeId == employeeId &&
+                                                data.IsPrimary == true &&
+                                                data.Status == CommonStatus.Active &&
+                                                data.Employee.Status == CommonStatus.Active);
+
+            // Get contacts based on the specification
+            var result = _contact.GetContact<ContactDto>(specification);
+
+            return Ok(result);
+        }
+        #endregion
+
+        #region Employee Address
+        [HttpGet("{employeeId}/addresses")]
+        public IActionResult GetEmployeeAddresses(Guid employeeId)
+        {
+            // Set specification for getting addresses
+            var specification = new BaseSpecification<Address>();
+            specification.AddExpression(data => data.EmployeeId == employeeId &&
+                                                data.Status == CommonStatus.Active &&
+                                                data.Employee.Status == CommonStatus.Active);
+
+            // Get addresses based on the specification
+            var result = _address.GetAddresses<AddressDto>(specification);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{employeeId}/address/primary")]
+        public IActionResult GetEmployeePrimaryAddress(Guid employeeId)
+        {
+            // Set specification for getting addresses
+            var specification = new BaseSpecification<Address>();
+            specification.AddExpression(data => data.EmployeeId == employeeId &&
+                                                data.Type == AddressType.Primary &&
+                                                data.Status == CommonStatus.Active &&
+                                                data.Employee.Status == CommonStatus.Active);
+
+            // Get addresses based on the specification
+            var result = _address.GetAddress<AddressDto>(specification);
+
+            return Ok(result);
+        }
+        #endregion
     }
 }

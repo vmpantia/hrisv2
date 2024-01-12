@@ -19,13 +19,19 @@ namespace HRIS.Application.Services
 
         public List<TDto> GetContacts<TDto>(ISpecification<Contact> specification) =>
             _unitOfwork.Contact.GetList(specification)
-                                .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
-                                .ToList();
+                               .Select(data => _unitOfwork.Mapper.Map<TDto>(data))
+                               .ToList();
 
         public TDto GetContact<TDto>(ISpecification<Contact> specification)
         {
+            // Check if the contact exist
+            if (!_unitOfwork.Contact.IsExist(specification))
+                throw new NotFoundException("Contact not found in the database.");
+
+            // Get contact from the database
             var contact = _unitOfwork.Contact.GetOne(specification);
 
+            // Map Contact to ContactDto
             return _unitOfwork.Mapper.Map<TDto>(contact);
         }
 

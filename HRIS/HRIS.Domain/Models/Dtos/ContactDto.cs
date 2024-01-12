@@ -10,7 +10,5 @@
         public bool IsPrimary { get; set; }
         public bool IsPersonal { get; set; }
         public string Status { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string CreatedBy { get; set; }
     }
 }

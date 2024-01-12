@@ -34,8 +34,14 @@ namespace HRIS.Application.Services
 
         public TDto GetEmployee<TDto>(ISpecification<Employee> specification)
         {
+            // Check if the employee exist
+            if (!_unitOfwork.Employee.IsExist(specification))
+                throw new NotFoundException("Employee not found in the database.");
+
+            // Get employee from the database
             var employee = _unitOfwork.Employee.GetOne(specification);
 
+            // Map Employee to EmployeeDto
             return _unitOfwork.Mapper.Map<TDto>(employee);
         }
 

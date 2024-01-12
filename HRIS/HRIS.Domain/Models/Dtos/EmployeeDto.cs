@@ -12,10 +12,5 @@
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
         public string Status { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string CreatedBy { get; set; }
-
-        public List<ContactDto> Contacts { get; set; }
-        public List<AddressDto> Addresses { get; set; }
     }
 }
