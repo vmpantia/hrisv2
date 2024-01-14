@@ -1,4 +1,6 @@
-﻿namespace HRIS.Domain.Models.Dtos
+﻿using HRIS.Domain.Models.Enums;
+
+namespace HRIS.Domain.Models.Dtos
 {
     public class ContactDto
     {
@@ -9,6 +11,7 @@
         public string Category { get; set; }
         public bool IsPrimary { get; set; }
         public bool IsPersonal { get; set; }
-        public string Status { get; set; }
+        public CommonStatus Status { get; set; }
+        public string StatusDescription { get; set; }
     }
 }

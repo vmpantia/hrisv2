@@ -1,4 +1,6 @@
-﻿namespace HRIS.Domain.Models.Dtos
+﻿using HRIS.Domain.Models.Enums;
+
+namespace HRIS.Domain.Models.Dtos
 {
     public class AddressDto
     {
@@ -13,6 +15,7 @@
         public string ZipCode { get; set; }
         public string Country { get; set; }
         public string Type { get; set; }
-        public string Status { get; set; }
+        public CommonStatus Status { get; set; }
+        public string StatusDescription { get; set; }
     }
 }

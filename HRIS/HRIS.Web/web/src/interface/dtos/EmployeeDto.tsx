@@ -1,3 +1,5 @@
+import { CommonStatus } from "@/enums/CommonStatus";
+
 export interface EmployeeDto {
     id:string;
     number:string;
@@ -8,5 +10,6 @@ export interface EmployeeDto {
     gender:string;
     birthDate:Date;
     age:number;
-    status:string;
+    status:CommonStatus;
+    statusDescription: string;
 } 

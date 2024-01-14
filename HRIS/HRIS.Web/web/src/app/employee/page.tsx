@@ -28,10 +28,14 @@ const page = () => {
         fetchEmployeeList();
     }, []);
 
+    useEffect(() => {
+        fetchEmployeeList();
+    }, [employeeList, employeeFilter]);
+
     return (
         <>
             <div>Test Page</div>
-            <EmployeeList   data={employeeList} 
+            <EmployeeList data={employeeList} 
                             hasUpdateStatusAction={true} />
         </>
     )

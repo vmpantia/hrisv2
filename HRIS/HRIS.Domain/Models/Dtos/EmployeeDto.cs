@@ -1,4 +1,6 @@
-﻿namespace HRIS.Domain.Models.Dtos
+﻿using HRIS.Domain.Models.Enums;
+
+namespace HRIS.Domain.Models.Dtos
 {
     public class EmployeeDto
     {
@@ -11,6 +13,7 @@
         public string Gender { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
-        public string Status { get; set; }
+        public CommonStatus Status { get; set; }
+        public string StatusDescription { get; set; }
     }
 }

@@ -32,17 +32,17 @@ namespace HRIS.Domain.Mappings
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.GetFullName()))
                 .ForMember(dst => dst.Age, opt => opt.MapFrom(src => src.BirthDate.GetYearDiff(DateUtil.GetCurrentDate())))
-                .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
+                .ForMember(dst => dst.StatusDescription, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
             CreateMap<Contact, ContactDto>()
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
                 .ForMember(dst => dst.Category, opt => opt.MapFrom(src => src.IsPersonal ? "Personal" : "Corporate"))
-                .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
+                .ForMember(dst => dst.StatusDescription, opt => opt.MapFrom(src => src.Status.GetDescription()));
 
             CreateMap<Address, AddressDto>()
                 .ForMember(dst => dst.Address, opt => opt.MapFrom(src => src.GetFullAddress()))
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
-                .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.Status.GetDescription()));
+                .ForMember(dst => dst.StatusDescription, opt => opt.MapFrom(src => src.Status.GetDescription()));
         }
     }
 }

@@ -43,9 +43,11 @@ const EmployeeList: React.FC<EmployeeListProps> = ({ data }) => {
                                 <td>{employee.gender}</td>
                                 <td>{format(employee.birthDate, "yyyy-MM-dd")}</td>
                                 <td>{employee.age}</td>
-                                <td>{employee.status}</td>
+                                <td>{employee.statusDescription}</td>
                                 <td>
-                                    <button onClick={() => onClickUpdateStatus(employee.id, CommonStatus.Inactive)}>Inactive</button>
+                                    <button onClick={() => onClickUpdateStatus(employee.id, employee.status == CommonStatus.Active ? CommonStatus.Inactive : CommonStatus.Active)}>
+                                        {employee.status == CommonStatus.Active ? 'Incative' : 'Active' }
+                                    </button>
                                     <button onClick={() => onClickUpdateStatus(employee.id, CommonStatus.Deleted)}>Delete</button>
                                 </td>
                             </tr>
