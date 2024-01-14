@@ -1,6 +1,7 @@
+import { format } from 'date-fns'
 import React from 'react'
 
-const EmployeeList: React.FC<EmployeeListProps> = ({ employees }) => {
+const EmployeeList: React.FC<EmployeeListProps> = ({ data }) => {
     return (
         <table>
             <thead>
@@ -15,7 +16,7 @@ const EmployeeList: React.FC<EmployeeListProps> = ({ employees }) => {
                 </tr>
             </thead>
             <tbody>
-                {employees == null || employees.length == 0 ?
+                {data == null || data.length == 0 ?
                     (
                         <tr>
                             <td colSpan={7}>
@@ -25,15 +26,15 @@ const EmployeeList: React.FC<EmployeeListProps> = ({ employees }) => {
                     )
                     :
                     (
-                        employees.map((data, idx) => (
-                            <tr key={data.Id}>
-                                <td>{idx}</td>
-                                <td>{data.Number}</td>
-                                <td>{data.Name}</td>
-                                <td>{data.Gender}</td>
-                                <td>{data.BirthDate.getDate()}</td>
-                                <td>{data.Age}</td>
-                                <td>{data.Status}</td>
+                        data.map((employee, idx) => (
+                            <tr key={employee.id}>
+                                <td>{idx + 1}</td>
+                                <td>{employee.number}</td>
+                                <td>{employee.name}</td>
+                                <td>{employee.gender}</td>
+                                <td>{format(employee.birthDate, "yyyy-MM-dd")}</td>
+                                <td>{employee.age}</td>
+                                <td>{employee.status}</td>
                             </tr>
                         ))
                     )

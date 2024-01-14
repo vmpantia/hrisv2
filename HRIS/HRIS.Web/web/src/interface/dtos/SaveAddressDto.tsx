@@ -1,11 +1,11 @@
 interface SaveAddressDto {
-    Id?:string;
-    Line1:string;
-    Line2?:string;
-    Barangay:string;
-    City:string;
-    Province:string;
-    ZipCode:string;
-    Country:string;
-    Type:AddressType;
+    id?:string;
+    line1:string;
+    line2?:string;
+    barangay:string;
+    city:string;
+    province:string;
+    zipCode:string;
+    country:string;
+    type:AddressType;
 }

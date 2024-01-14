@@ -1,12 +1,12 @@
 interface EmployeeDto {
-    Id:string;
-    Number:string;
-    Name:string;
-    FirstName:string;
-    MiddleName?:string;
-    LastName:string;
-    Gender:string;
-    BirthDate:Date;
-    Age:number;
-    Status:string;
+    id:string;
+    number:string;
+    name:string;
+    firstName:string;
+    middleName?:string;
+    lastName:string;
+    gender:string;
+    birthDate:Date;
+    age:number;
+    status:string;
 } 

@@ -1,3 +1,3 @@
 interface EmployeeListProps {
-    employees: EmployeeDto[];
+    data: EmployeeDto[];
 }

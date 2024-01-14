@@ -1,7 +1,7 @@
 interface SaveContactDto {
-    Id?:string;
-    Value:string;
-    Type:ContactType;
-    IsPrimary:boolean;
-    IsPersonal:boolean;
+    id?:string;
+    value:string;
+    type:ContactType;
+    isPrimary:boolean;
+    isPersonal:boolean;
 }

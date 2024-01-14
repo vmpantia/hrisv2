@@ -1,3 +1,3 @@
 interface UpdateCommonStatusDto {
-    NewStatus:CommonStatus;
+    newStatus:CommonStatus;
 } 
