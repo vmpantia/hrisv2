@@ -1,0 +1,3 @@
+interface EmployeeListProps {
+    employees: EmployeeDto[];
+}
