@@ -20,11 +20,4 @@ namespace HRIS.Domain.Models.Dtos
         [Required]
         public List<SaveAddressDto> Addresses { get; set; }
     }
-
-    public class ChangeCommonStatusDto
-    {
-        [Required]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public CommonStatus NewStatus { get; set; }
-    }
 }

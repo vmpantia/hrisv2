@@ -90,7 +90,7 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PatchEmployeeStatus(Guid id, [FromForm] ChangeCommonStatusDto request)
+        public IActionResult PatchEmployeeStatus(Guid id, [FromForm] UpdateCommonStatusDto request)
         {
             // Update employee status
             _employee.UpdateEmployeeStatus(id, request.NewStatus, string.Empty);
