@@ -106,8 +106,7 @@ namespace HRIS.Api.Controllers
             // Set specification for getting contacts
             var specification = new BaseSpecification<Contact>();
             specification.AddExpression(data => data.EmployeeId == employeeId &&
-                                                data.Status == CommonStatus.Active &&
-                                                data.Employee.Status == CommonStatus.Active);
+                                                data.Status == CommonStatus.Active);
 
             // Get contacts based on the specification
             var result = _contact.GetContacts<ContactDto>(specification);
@@ -122,8 +121,7 @@ namespace HRIS.Api.Controllers
             var specification = new BaseSpecification<Contact>();
             specification.AddExpression(data => data.EmployeeId == employeeId &&
                                                 data.IsPrimary == true &&
-                                                data.Status == CommonStatus.Active &&
-                                                data.Employee.Status == CommonStatus.Active);
+                                                data.Status == CommonStatus.Active);
 
             // Get contacts based on the specification
             var result = _contact.GetContact<ContactDto>(specification);
@@ -139,8 +137,7 @@ namespace HRIS.Api.Controllers
             // Set specification for getting addresses
             var specification = new BaseSpecification<Address>();
             specification.AddExpression(data => data.EmployeeId == employeeId &&
-                                                data.Status == CommonStatus.Active &&
-                                                data.Employee.Status == CommonStatus.Active);
+                                                data.Status == CommonStatus.Active);
 
             // Get addresses based on the specification
             var result = _address.GetAddresses<AddressDto>(specification);
@@ -155,8 +152,7 @@ namespace HRIS.Api.Controllers
             var specification = new BaseSpecification<Address>();
             specification.AddExpression(data => data.EmployeeId == employeeId &&
                                                 data.Type == AddressType.Primary &&
-                                                data.Status == CommonStatus.Active &&
-                                                data.Employee.Status == CommonStatus.Active);
+                                                data.Status == CommonStatus.Active);
 
             // Get addresses based on the specification
             var result = _address.GetAddress<AddressDto>(specification);

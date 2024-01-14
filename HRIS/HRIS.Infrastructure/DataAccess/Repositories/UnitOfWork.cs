@@ -17,15 +17,16 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
         private IBaseRepository<Address> _address;
         private IAppLogRepository _appLog;
 
-        public UnitOfWork(HRISDbContext context, IMapper mapper, ILogger logger)
+        public UnitOfWork(HRISDbContext context, IMapper mapper, ILogger<UnitOfWork> logger)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
         }
 
-        public IMapper Mapper { get { return _mapper; } }
+        public IMapper Mapper => _mapper;
 
+        #region Custom Repository
         public IConfigRepository Config
         {
             get
@@ -37,6 +38,19 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             }
         }
 
+        public IAppLogRepository AppLog
+        {
+            get
+            {
+                if (_appLog == null)
+                    _appLog = new AppLogRepository(_context, _mapper, _logger);
+
+                return _appLog;
+            }
+        }
+        #endregion
+
+        #region Common Repository
         public IBaseRepository<Employee> Employee
         {
             get
@@ -69,17 +83,7 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
                 return _address;
             }
         }
-
-        public IAppLogRepository AppLog
-        {
-            get
-            {
-                if (_appLog == null)
-                    _appLog = new AppLogRepository(_context, _mapper, _logger);
-
-                return _appLog;
-            }
-        }
+        #endregion
 
         public void Save() =>
             _context.SaveChanges();

@@ -8,6 +8,7 @@ namespace HRIS.Domain.Interfaces.Repositories
     {
         IMapper Mapper { get; }
         IConfigRepository Config { get; }
+        IAppLogRepository AppLog { get; }
         IBaseRepository<Employee> Employee { get; }
         IBaseRepository<Contact> Contact { get; }
         IBaseRepository<Address> Address { get; }
