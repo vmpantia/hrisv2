@@ -1,10 +1,10 @@
-interface ContactDto {
-    Id:string;
-    EmployeeId:string;
-    Value:string;
-    Type:string;
-    Category:string;
-    IsPrimary:boolean;
-    IsPersonal:boolean;
-    Status:string;
+export interface ContactDto {
+    id:string;
+    employeeId:string;
+    value:string;
+    type:string;
+    category:string;
+    isPrimary:boolean;
+    isPersonal:boolean;
+    status:string;
 }

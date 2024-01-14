@@ -1,3 +1,5 @@
-interface UpdateCommonStatusDto {
-    NewStatus:CommonStatus;
+import { CommonStatus } from "@/enums/CommonStatus";
+
+export interface UpdateCommonStatusDto {
+    newStatus:CommonStatus;
 } 

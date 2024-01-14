@@ -1,4 +1,4 @@
-enum CommonStatus
+export enum CommonStatus
 {
     Active,
     Inactive,

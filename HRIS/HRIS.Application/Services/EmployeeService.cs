@@ -120,7 +120,7 @@ namespace HRIS.Application.Services
         {
             // Prepare employee specification
             var specification = new BaseSpecification<Employee>();
-            specification.AddExpression(data => data.Id == employeeId && data.Status == CommonStatus.Active);
+            specification.AddExpression(data => data.Id == employeeId && data.Status != CommonStatus.Deleted);
 
             // Check if the employee exist
             if (!_unitOfwork.Employee.IsExist(specification))

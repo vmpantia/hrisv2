@@ -1,14 +1,14 @@
-interface AddressDto {
-    Id:string;
-    EmployeeId:string;
-    Address:string;
-    Line1:string;
-    Line2?:string;
-    Barangay:string;
-    City:string;
-    Province:string;
-    ZipCode:string;
-    Country:string;
-    Type:string;
-    Status:string;
+export interface AddressDto {
+    id:string;
+    employeeId:string;
+    address:string;
+    line1:string;
+    line2?:string;
+    barangay:string;
+    city:string;
+    province:string;
+    zipCode:string;
+    country:string;
+    type:string;
+    status:string;
 }

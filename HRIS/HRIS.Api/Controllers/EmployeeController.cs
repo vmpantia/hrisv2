@@ -39,11 +39,12 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPost("filter")]
-        public IActionResult PostFilterEmployees([FromBody] ResourceFilter<EmployeeFilterPropertyType> request)
+        public IActionResult PostFilterEmployees(ResourceFilter<EmployeeFilterPropertyType> request)
         {
             // Set specification for getting employees
             var specification = new BaseSpecification<Employee>();
-            specification.AddExpressionFilters(request.Filters)
+            specification.AddExpression(data => data.Status != CommonStatus.Deleted)
+                         .AddExpressionFilters(request.Filters)
                          .AddOrderBy(data => data.CreatedAt)
                          .SetPagination(request.Pagination);
 
@@ -90,7 +91,7 @@ namespace HRIS.Api.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PatchEmployeeStatus(Guid id, [FromForm] UpdateCommonStatusDto request)
+        public IActionResult PatchEmployeeStatus(Guid id, UpdateCommonStatusDto request)
         {
             // Update employee status
             _employee.UpdateEmployeeStatus(id, request.NewStatus, string.Empty);

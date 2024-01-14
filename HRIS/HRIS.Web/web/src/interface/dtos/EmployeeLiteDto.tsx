@@ -1,7 +1,6 @@
-interface EmployeeLiteDto {
-    Id:string;
-    Name:string;
-    Status:string;
-    CreatedAt:Date;
-    CreatedBy:string;
+export interface EmployeeLiteDto {
+    id:string;
+    number:string;
+    name:string;
+    status:string;
 } 
