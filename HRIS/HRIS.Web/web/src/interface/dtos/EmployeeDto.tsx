@@ -12,4 +12,6 @@ export interface EmployeeDto {
     age:number;
     status:CommonStatus;
     statusDescription: string;
+    primaryContact?:string;
+    primaryAddress?:string;
 } 

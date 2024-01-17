@@ -45,6 +45,8 @@ namespace HRIS.Api.Controllers
             var specification = new BaseSpecification<Employee>();
             specification.AddExpression(data => data.Status != CommonStatus.Deleted)
                          .AddExpressionFilters(request.Filters)
+                         .AddInclude(tbl => tbl.Contacts)
+                         .AddInclude(tbl => tbl.Addresses)
                          .AddOrderBy(data => data.CreatedAt)
                          .SetPagination(request.Pagination);
 

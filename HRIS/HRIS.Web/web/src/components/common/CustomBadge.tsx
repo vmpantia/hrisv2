@@ -3,7 +3,7 @@ import React from 'react'
 
 const Badge: React.FC<CustomBadgeProps> = ({ value }) => {
     return (
-        <span className='bg-slate-400 py-1 px-2 rounded-md text-xs font-bold'>
+        <span className='drop-shadow-md bg-blue-800 py-0.5 px-3 rounded-lg text-xs text-white'>
             {value}
         </span>
     )

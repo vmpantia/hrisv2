@@ -4,6 +4,7 @@ namespace HRIS.Domain.Models.Dtos
 {
     public class EmployeeDto
     {
+        // Employee Information
         public Guid Id { get; set; }
         public string Number { get; set; }
         public string Name { get; set; }
@@ -15,5 +16,11 @@ namespace HRIS.Domain.Models.Dtos
         public int Age { get; set; }
         public CommonStatus Status { get; set; }
         public string StatusDescription { get; set; }
+
+        // Contact Information
+        public string? PrimaryContact { get; set; }
+        
+        // Address Information
+        public string? PrimaryAddress { get; set; }
     }
 }

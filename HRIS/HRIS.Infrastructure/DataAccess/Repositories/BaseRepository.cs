@@ -40,21 +40,24 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
         public IEnumerable<TEntity> GetList(ISpecification<TEntity> specification)
         {
-            IEnumerable<TEntity> result = _table.AsNoTracking();
+            IQueryable<TEntity> result = _table.AsNoTracking();
 
             if (specification.Expressions != null && specification.Expressions.Any())
-                specification.Expressions.ForEach(exp => { result = result.Where(exp.Compile()); });
+                specification.Expressions.ForEach(exp => { result = result.Where(exp); });
 
             if (specification.OrderBy != null && specification.OrderBy.Any())
-                specification.OrderBy.ForEach(exp => { result = result.OrderBy(exp.Compile()); });
+                specification.OrderBy.ForEach(exp => { result = result.OrderBy(exp); });
 
             if (specification.OrderByDescending != null && specification.OrderByDescending.Any())
-                specification.OrderByDescending.ForEach(exp => { result = result.OrderByDescending(exp.Compile()); });
+                specification.OrderByDescending.ForEach(exp => { result = result.OrderByDescending(exp); });
 
             if (specification.IsPaginationEnabled)
                 result = result.Take(specification.Take).Skip(specification.Skip);
 
-            return specification.Includes.Aggregate(result, (current, include) => current.AsQueryable().Include(include));
+            if (specification.Includes != null && specification.Includes.Any())
+                specification.Includes.ForEach(exp => { result = result.Include(exp); });
+
+            return result;
         }
 
         public TEntity GetOne(ISpecification<TEntity> specification)

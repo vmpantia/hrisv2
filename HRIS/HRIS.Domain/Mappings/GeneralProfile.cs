@@ -32,7 +32,9 @@ namespace HRIS.Domain.Mappings
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.GetFullName()))
                 .ForMember(dst => dst.Age, opt => opt.MapFrom(src => src.BirthDate.GetYearDiff(DateUtil.GetCurrentDate())))
-                .ForMember(dst => dst.StatusDescription, opt => opt.MapFrom(src => src.Status.GetDescription()));
+                .ForMember(dst => dst.StatusDescription, opt => opt.MapFrom(src => src.Status.GetDescription()))
+                .ForMember(dst => dst.PrimaryContact, opt => opt.MapFrom(src => src.Contacts.Any() ? src.Contacts.First().Value : null))
+                .ForMember(dst => dst.PrimaryAddress, opt => opt.MapFrom(src => src.Addresses.Any() ? src.Addresses.First().GetFullAddress() : null));
 
             CreateMap<Contact, ContactDto>()
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type.GetDescription()))
