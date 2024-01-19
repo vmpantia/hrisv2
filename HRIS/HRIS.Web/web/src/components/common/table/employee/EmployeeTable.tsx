@@ -1,11 +1,12 @@
 import { updateStatus } from '@/api/EmployeeApi'
 import { CommonStatus } from '@/enums/CommonStatus'
 import { EmployeeTableProps } from '@/interface/props/EmployeeTableProps'
-import { MaterialReactTable } from 'material-react-table';
+import { MRT_PaginationState, MaterialReactTable } from 'material-react-table';
 import { EmployeeDtoTableColumns } from '../CustomTableColumns';
-import React from 'react'
+import React, { useState } from 'react'
 
-const EmployeeTable: React.FC<EmployeeTableProps> = ({ data, isLoading }) => {
+const EmployeeTable: React.FC<EmployeeTableProps> = ({ data, isLoading, pagination, setPagination, count }) => {
+
     const onClickUpdateStatus = (id:string, status:CommonStatus) => {
         updateStatus(id, { newStatus: status });
     }
@@ -14,7 +15,12 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ data, isLoading }) => {
         <MaterialReactTable 
                 columns={EmployeeDtoTableColumns()}
                 data={data}
-                state={{ isLoading }}
+                state={{ isLoading: isLoading, 
+                         pagination: pagination,
+                }}
+                onPaginationChange={setPagination}
+                rowCount={count}
+                manualPagination={true}
                 muiCircularProgressProps={{
                     color: 'primary',
                     thickness: 5,

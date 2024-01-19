@@ -38,6 +38,16 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             return isExist;
         }
 
+        public int Count(ISpecification<TEntity> specification)
+        {
+            IQueryable<TEntity> result = _table.AsNoTracking();
+
+            if (specification.Expressions != null && specification.Expressions.Any())
+                specification.Expressions.ForEach(exp => { result = result.Where(exp); });
+
+            return result.Count();
+        }
+
         public IEnumerable<TEntity> GetList(ISpecification<TEntity> specification)
         {
             IQueryable<TEntity> result = _table.AsNoTracking();
@@ -56,6 +66,9 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
             if (specification.Includes != null && specification.Includes.Any())
                 specification.Includes.ForEach(exp => { result = result.Include(exp); });
+
+            if (specification.IsSplitQuery)
+                return result.AsSplitQuery();
 
             return result;
         }

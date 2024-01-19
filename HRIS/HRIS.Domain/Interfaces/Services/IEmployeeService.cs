@@ -7,6 +7,7 @@ namespace HRIS.Domain.Interfaces.Services
 {
     public interface IEmployeeService
     {
+        int Count(ISpecification<Employee> specification);
         List<TDto> GetEmployees<TDto>(ISpecification<Employee> specification);
         TDto GetEmployee<TDto>(ISpecification<Employee> specification);
         Guid CreateEmployee(SaveEmployeeDto request, string requestor);

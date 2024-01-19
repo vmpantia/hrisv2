@@ -5,14 +5,13 @@ using HRIS.Domain.Models.Enums;
 
 namespace HRIS.Domain.Interfaces.Services
 {
-    public interface IContactService
+    public interface IAddressService
     {
-        List<TDto> GetContacts<TDto>(ISpecification<Contact> specification);
-        TDto GetContact<TDto>(ISpecification<Contact> specification);
-        void CreateCorporateEmail(Guid employeeId, string firstName, string lastName, string? middleName);
-        void CreateContact(Guid employeeId, SaveContactDto request, string requestor, bool isAutoSave = false);
-        void SyncContacts(Guid employeeId, List<SaveContactDto> latestContacts, string requestor);
-        void UpdateContact(Guid contactId, SaveContactDto request, string requestor, bool isAutoSave = false);
-        void UpdateContactStatus(Guid contactId, CommonStatus newStatus, string requestor, bool isAutoSave = false);
+        List<TDto> GetAddresses<TDto>(ISpecification<Address> specification);
+        TDto GetAddress<TDto>(ISpecification<Address> specification);
+        void CreateAddress(Guid employeeId, SaveAddressDto request, string requestor, bool isAutoSave = false);
+        void SyncAddresss(Guid employeeId, List<SaveAddressDto> latestAddresss, string requestor);
+        void UpdateAddress(Guid addressId, SaveAddressDto request, string requestor, bool isAutoSave = false);
+        void UpdateAddressStatus(Guid addressId, CommonStatus newStatus, string requestor, bool isAutoSave = false);
     }
 }

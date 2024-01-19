@@ -27,6 +27,9 @@ namespace HRIS.Application.Services
             _addressService = new AddressService(unitOfwork);
         }
 
+        public int Count(ISpecification<Employee> specification) =>
+            _unitOfwork.Employee.Count(specification);
+
         public List<TDto> GetEmployees<TDto>(ISpecification<Employee> specification) => 
             _unitOfwork.Employee.GetList(specification)
                                 .Select(data => _unitOfwork.Mapper.Map<TDto>(data))

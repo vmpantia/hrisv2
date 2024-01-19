@@ -48,12 +48,18 @@ namespace HRIS.Api.Controllers
                          .AddInclude(tbl => tbl.Contacts.Where(data => data.IsPrimary && data.Status == CommonStatus.Active))
                          .AddInclude(tbl => tbl.Addresses.Where(data => data.Type == AddressType.Primary && data.Status == CommonStatus.Active))
                          .AddOrderBy(data => data.CreatedAt)
-                         .SetPagination(request.Pagination);
+                         .SetPagination(request.Pagination)
+                         .SetSplitQuery(true);
 
-            // Get employees based on the specification
-            var result = _employee.GetEmployees<EmployeeDto>(specification);
+            // Get and count employees based on the specification
+            var data = _employee.GetEmployees<EmployeeDto>(specification);
+            var count = _employee.Count(specification);
 
-            return Ok(result);
+            return Ok(new
+            {
+                data,
+                count,
+            });
         }
 
         [HttpGet("{id}")]
