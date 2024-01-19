@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { getEmployeeListByFilter } from '@/api/EmployeeApi';
-import EmployeeList from '@/components/employee/EmployeeList'
 import { EmployeeDto } from '@/interface/dtos/EmployeeDto';
 import { EmployeeFilterPropertyType } from '@/enums/filter/EmployeeFilterPropertyType';
+import EmployeeTable from '@/components/common/table/employee/EmployeeTable';
+import { filterEmployeeListByFilter } from '@/api/EmployeeApi';
 
 const page = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [employeeList, setEmployeeList] = useState<EmployeeDto[]>([]);
     const [employeeFilter, setEmployeeFilter] = useState<ResourceFilter<EmployeeFilterPropertyType>>({
         filters: [],
@@ -17,10 +18,17 @@ const page = () => {
     })
 
     const fetchEmployeeList = () => {
+        // Set loading state to true
+        setIsLoading(true);
+
         // Get employee list by filter in API
-        getEmployeeListByFilter(employeeFilter)
+        filterEmployeeListByFilter(employeeFilter)
             .then((res: EmployeeDto[]) => {
+                // Set employee list based on the response
                 setEmployeeList(res);
+
+                // Set loading state to false
+                setIsLoading(false);
             })
     }
 
@@ -31,8 +39,8 @@ const page = () => {
     return (
         <>
             <div>Test Page</div>
-            <EmployeeList data={employeeList} 
-                            hasUpdateStatusAction={true} />
+            <EmployeeTable data={employeeList} 
+                           isLoading={isLoading} />
         </>
     )
 }

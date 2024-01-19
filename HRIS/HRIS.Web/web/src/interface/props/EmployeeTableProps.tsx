@@ -1,6 +1,6 @@
 import { EmployeeDto } from "../dtos/EmployeeDto";
 
-export interface EmployeeListProps {
+export interface EmployeeTableProps {
     data: EmployeeDto[];
-    hasUpdateStatusAction: boolean;
+    isLoading: boolean;
 }
