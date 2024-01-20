@@ -67,7 +67,7 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
             specification.CountFilteredData = result.Count();
 
             if (specification.IsPaginationEnabled)
-                result = result.Take(specification.Take).Skip(specification.Skip);
+                result = result.Skip(specification.Skip).Take(specification.Take);
 
             if (specification.Includes != null && specification.Includes.Any())
                 specification.Includes.ForEach(exp => { result = result.AsQueryable().Include(exp); });

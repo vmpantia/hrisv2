@@ -56,8 +56,8 @@ namespace HRIS.Api.Controllers
 
             return Ok(new
             {
-                data = data,
-                noOfdata = specification.CountFilteredData,
+                data,
+                specification.CountFilteredData,
             });
         }
 

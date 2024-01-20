@@ -1,11 +1,10 @@
 import { EmployeeDto } from "../dtos/EmployeeDto";
-import { MRT_PaginationState } from "material-react-table";
+import { Pagination } from "../filter/Pagination";
 
 export interface EmployeeTableProps {
     data: EmployeeDto[];
     isLoading: boolean;
-    // MRT Pagination
-    pagination: MRT_PaginationState;
+    pagination: any;
     setPagination: any;
     count: number;
 }
