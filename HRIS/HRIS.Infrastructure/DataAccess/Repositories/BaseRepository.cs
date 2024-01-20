@@ -50,25 +50,27 @@ namespace HRIS.Infrastructure.DataAccess.Repositories
 
         public IEnumerable<TEntity> GetList(ISpecification<TEntity> specification)
         {
-            IQueryable<TEntity> result = _table.AsNoTracking();
+            IEnumerable<TEntity> result = specification.IsSplitQuery ? 
+                                    _table.AsNoTracking()
+                                          .AsSplitQuery() : _table.AsNoTracking();
 
             if (specification.Expressions != null && specification.Expressions.Any())
-                specification.Expressions.ForEach(exp => { result = result.Where(exp); });
+                specification.Expressions.ForEach(exp => { result = result.Where(exp.Compile()); });
 
             if (specification.OrderBy != null && specification.OrderBy.Any())
-                specification.OrderBy.ForEach(exp => { result = result.OrderBy(exp); });
+                specification.OrderBy.ForEach(exp => { result = result.OrderBy(exp.Compile()); });
 
             if (specification.OrderByDescending != null && specification.OrderByDescending.Any())
-                specification.OrderByDescending.ForEach(exp => { result = result.OrderByDescending(exp); });
+                specification.OrderByDescending.ForEach(exp => { result = result.OrderByDescending(exp.Compile()); });
+
+            // Set number of filtered data before doing pagination
+            specification.CountFilteredData = result.Count();
 
             if (specification.IsPaginationEnabled)
                 result = result.Take(specification.Take).Skip(specification.Skip);
 
             if (specification.Includes != null && specification.Includes.Any())
-                specification.Includes.ForEach(exp => { result = result.Include(exp); });
-
-            if (specification.IsSplitQuery)
-                return result.AsSplitQuery();
+                specification.Includes.ForEach(exp => { result = result.AsQueryable().Include(exp); });
 
             return result;
         }

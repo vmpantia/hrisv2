@@ -53,12 +53,11 @@ namespace HRIS.Api.Controllers
 
             // Get and count employees based on the specification
             var data = _employee.GetEmployees<EmployeeDto>(specification);
-            var count = _employee.Count(specification);
 
             return Ok(new
             {
-                data,
-                count,
+                data = data,
+                noOfdata = specification.CountFilteredData,
             });
         }
 

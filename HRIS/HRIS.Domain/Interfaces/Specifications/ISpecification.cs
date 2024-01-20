@@ -13,5 +13,6 @@ namespace HRIS.Domain.Interfaces.Specifications
         public int Take { get; }
         public bool IsPaginationEnabled { get; }
         public bool IsSplitQuery { get; }
+        public int CountFilteredData { get; set; }
     }
 }

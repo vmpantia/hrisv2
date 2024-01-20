@@ -28,6 +28,7 @@ namespace HRIS.Domain.Specifications
         public int Take { get; private set; }
         public bool IsPaginationEnabled { get; private set; }
         public bool IsSplitQuery { get; private set; } = false;
+        public int CountFilteredData { get; set; }
 
         public BaseSpecification<TEntity> AddInclude(Expression<Func<TEntity, object>> includeExpression)
         {
@@ -73,7 +74,7 @@ namespace HRIS.Domain.Specifications
 
         public BaseSpecification<TEntity> SetPagination(Pagination pagination)
         {
-            Skip = (pagination.PageNumber - 1) * pagination.PageSize;
+            Skip = (pagination.PageIndex) * pagination.PageSize;
             Take = pagination.PageSize;
             IsPaginationEnabled = true;
             return this;
