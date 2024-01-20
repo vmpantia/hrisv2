@@ -2,8 +2,8 @@
 {
     public enum ConditionFilterType
     {
-        Equal,
-        NotEqual,
+        Equals,
+        NotEquals,
         Contains,
         NotContains,
         GreaterThan,

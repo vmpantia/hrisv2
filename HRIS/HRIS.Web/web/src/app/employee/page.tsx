@@ -5,28 +5,28 @@ import { EmployeeDto } from '@/interface/dtos/EmployeeDto';
 import { EmployeeFilterPropertyType } from '@/enums/filter/EmployeeFilterPropertyType';
 import EmployeeTable from '@/components/common/table/employee/EmployeeTable';
 import { filterEmployeeListByFilter } from '@/api/EmployeeApi';
-import { Pagination } from '@/interface/filter/Pagination';
-import { CustomFilter } from '@/interface/filter/CustomFilter';
 import { ResourceFilter } from '@/interface/filter/ResourceFilter';
+import { MRT_ColumnFiltersState, MRT_PaginationState } from 'material-react-table';
+import { ConvertMRTColumnFilters, ConvertMRTPagination } from '@/helpers/ConversionHelper';
 
 const page = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [employeeList, setEmployeeList] = useState<EmployeeDto[]>([]);
 
     // Filter and Pagination related variables
-    const [pagination, setPagination] = useState<Pagination>({ pageIndex: 0, pageSize: 10 });
-    const [filters, setFilters] = useState<CustomFilter<EmployeeFilterPropertyType>[]>([]);
+    const [mrtColumnFilters, setMrtColumnFilters] = useState<MRT_ColumnFiltersState>([]);
+    const [mrtPagination, setMrtPagination] = useState<MRT_PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [countFilteredData, setCountFilteredData] = useState(0);
 
     const fetchEmployeeList = () => {
-        // Prepare payload for filter employee
-        let payload:ResourceFilter<EmployeeFilterPropertyType> = {
-            filters: filters,
-            pagination: pagination,
-        };
-
         // Set loading state to true
         setIsLoading(true);
+
+        // Prepare payload for filter employee
+        let payload:ResourceFilter<EmployeeFilterPropertyType> = {
+            filters: ConvertMRTColumnFilters(mrtColumnFilters),
+            pagination: ConvertMRTPagination(mrtPagination),
+        };
 
         // Get employee list by filter in API
         filterEmployeeListByFilter(payload)
@@ -47,15 +47,18 @@ const page = () => {
     }, []);
 
     useEffect(() => {
+        // Get new batch of employee list based on the filters
         fetchEmployeeList();
-    }, [pagination.pageIndex, pagination.pageSize]);
+    }, [mrtPagination.pageIndex, mrtPagination.pageSize, mrtColumnFilters]);
 
     return (
         <>
             <EmployeeTable data={employeeList} 
                            isLoading={isLoading}
-                           pagination={pagination}
-                           setPagination={setPagination}
+                           pagination={mrtPagination}
+                           setPagination={setMrtPagination}
+                           columnFilters={mrtColumnFilters}
+                           setColumnFilters={setMrtColumnFilters}
                            count={countFilteredData} />
         </>
     )

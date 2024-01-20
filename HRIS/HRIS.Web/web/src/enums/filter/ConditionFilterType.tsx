@@ -1,6 +1,6 @@
 export enum ConditionFilterType {
-    Equal,
-    NotEqual,
+    Equals,
+    NotEquals,
     Contains,
     NotContains,
     GreaterThan,

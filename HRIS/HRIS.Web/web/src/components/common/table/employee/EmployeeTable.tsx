@@ -1,36 +1,59 @@
 import { updateStatus } from '@/api/EmployeeApi'
 import { CommonStatus } from '@/enums/CommonStatus'
 import { EmployeeTableProps } from '@/interface/props/EmployeeTableProps'
-import { MRT_PaginationState, MaterialReactTable } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { EmployeeDtoTableColumns } from '../CustomTableColumns';
-import React, { useState } from 'react'
+import React from 'react'
 
-const EmployeeTable: React.FC<EmployeeTableProps> = ({ data, isLoading, pagination, setPagination, count }) => {
+const EmployeeTable: React.FC<EmployeeTableProps> = ({ data, 
+                                                       isLoading, 
+                                                       pagination, 
+                                                       setPagination, 
+                                                       columnFilters,
+                                                       setColumnFilters,
+                                                       count }) => {
 
     const onClickUpdateStatus = (id:string, status:CommonStatus) => {
         updateStatus(id, { newStatus: status });
     }
 
-    return (
-        <MaterialReactTable 
-                columns={EmployeeDtoTableColumns()}
-                data={data}
-                state={{ isLoading: isLoading, 
-                         pagination: pagination,
-                }}
-                onPaginationChange={setPagination}
-                rowCount={count}
-                manualPagination={true}
-                muiCircularProgressProps={{
-                    color: 'primary',
-                    thickness: 5,
-                    size: 55,
-                }}
-                muiSkeletonProps={{
-                    animation: 'pulse',
-                    height: 28,
-                }}/>
-    )
+    const table = useMaterialReactTable({
+        columns: EmployeeDtoTableColumns(),
+        data: data,
+        state: {
+            isLoading: isLoading, 
+            pagination: pagination,
+            showColumnFilters: true,
+            columnFilters: columnFilters
+        },
+
+        // Loading
+        muiCircularProgressProps: {
+            color: 'primary',
+            thickness: 5,
+            size: 55,
+        },
+        muiSkeletonProps: {
+            animation: 'pulse',
+            height: 28,
+        },
+
+        // Pagination
+        manualPagination: true,
+        onPaginationChange: setPagination,
+        rowCount: count,
+
+        // Column Filters
+        enableGlobalFilter: false,
+        manualFiltering: true,
+        onColumnFiltersChange: setColumnFilters,
+
+        // Sticky
+        enableStickyHeader: true,
+        enableStickyFooter: true,
+    });
+
+    return <MaterialReactTable table={table}/>;
 }
 
 export default EmployeeTable

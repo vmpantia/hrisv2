@@ -39,8 +39,8 @@ namespace HRIS.Domain.Extensions
                 // Get epxression based on the condition value
                 Expression expression = condition switch
                 {
-                    ConditionFilterType.Equal => GetEqualExpression(property, filterProperty),
-                    ConditionFilterType.NotEqual => GetNotEqualExpression(property, filterProperty),
+                    ConditionFilterType.Equals => GetEqualsExpression(property, filterProperty),
+                    ConditionFilterType.NotEquals => GetNotEqualsExpression(property, filterProperty),
                     ConditionFilterType.Contains => GetContainsMethod(property, filterProperty),
                     ConditionFilterType.NotContains => GetNotContainsMethod(property, filterProperty),
                     ConditionFilterType.GreaterThan => Expression.GreaterThan(property, filterProperty),
@@ -58,7 +58,7 @@ namespace HRIS.Domain.Extensions
             }
         }
 
-        private static Expression GetEqualExpression(MemberExpression property, UnaryExpression filterProperty)
+        private static Expression GetEqualsExpression(MemberExpression property, UnaryExpression filterProperty)
         {
             if (property.Type != typeof(string))
                 return Expression.Equal(property, filterProperty);
@@ -67,9 +67,9 @@ namespace HRIS.Domain.Extensions
             return Expression.Call(property, equalsMethod, filterProperty, Expression.Constant(StringComparison.OrdinalIgnoreCase));
         }
 
-        private static Expression GetNotEqualExpression(MemberExpression property, UnaryExpression filterProperty)
+        private static Expression GetNotEqualsExpression(MemberExpression property, UnaryExpression filterProperty)
         {
-            var equalExpression = GetEqualExpression(property, filterProperty);
+            var equalExpression = GetEqualsExpression(property, filterProperty);
             return Expression.Not(equalExpression);
         }
 
