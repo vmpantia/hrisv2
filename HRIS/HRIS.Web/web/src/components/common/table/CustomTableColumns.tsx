@@ -8,7 +8,7 @@ export const EmployeeDtoTableColumns = ():MRT_ColumnDef<EmployeeDto>[] => [
     GenerateNormalColumn('Name', 'name', true, false) as MRT_ColumnDef<EmployeeDto>,
     GenerateNormalColumn('Contact', 'primaryContact', true, false) as MRT_ColumnDef<EmployeeDto>,
     GenerateNormalColumn('Address', 'primaryAddress', true, false) as MRT_ColumnDef<EmployeeDto>,
-    GenerateNormalColumn('Gender', 'gender', true, false) as MRT_ColumnDef<EmployeeDto>,
+    GenerateSelectionColumn('Gender', 'gender', true, false, ['Male', 'Female']) as MRT_ColumnDef<EmployeeDto>,
     GenerateBirthdateColumn('Birthdate', 'birthDate', true, false) as MRT_ColumnDef<EmployeeDto>,
     GenerateNormalColumn('Status', 'statusDescription', true, false) as MRT_ColumnDef<EmployeeDto>,
     GenerateNormalColumn('Action','action', false, false) as MRT_ColumnDef<EmployeeDto>,
@@ -16,7 +16,25 @@ export const EmployeeDtoTableColumns = ():MRT_ColumnDef<EmployeeDto>[] => [
 
 
 // Custom Columns
-
+const GenerateSelectionColumn = (header: string,
+                                 property:string,
+                                 enableColFilter:boolean, 
+                                 enableClickToCopy:boolean,
+                                 selectionList:string[],
+                                 size:number = 150) => {
+    return {
+        id: `${property}`,
+        header: `${header}`,
+        size: size,
+        enableColumnFilter: enableColFilter,
+        enableClickToCopy: enableClickToCopy,
+        accessorFn: (row: any) => {
+            return row[`${property}`] ?? '-';
+        },
+        filterVariant: 'select',
+        filterSelectOptions: selectionList,
+    }
+}
 
 const GenerateNormalColumn = (header:string, 
                               property:string, 
