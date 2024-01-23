@@ -51,6 +51,10 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ data,
         // Sticky
         enableStickyHeader: true,
         enableStickyFooter: true,
+
+        // Row Numbers
+        enableRowNumbers: true,
+        rowNumberDisplayMode: 'static', // default
     });
 
     return <MaterialReactTable table={table}/>;
